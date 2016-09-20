@@ -11,7 +11,7 @@ public enum Entities {
 	temp(0, 0, new Hitbox(Vector.ZERO(), Vector.ZERO()), ""),
 	player(1, 70, ForceArray.generateGenericForceArray(90), new Hitbox(new Vector(-16, -16, -16), new Vector(16, 16, 16)), "player"),
 	
-	canonball(0, 1, new HugeInteger(), "canonball", new Hitbox(new Vector(-3f, -1f), new Vector(3f, 1f)));
+	canonball(0, 5, new HugeInteger(), "canonball", new Hitbox(new Vector(-7f, -7f), new Vector(6f, 6f)));
 	
 	;
 

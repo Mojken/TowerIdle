@@ -1,7 +1,7 @@
 package objects.entities;
 
-import java.net.URL;
 import java.util.ArrayList;
+
 import net.abysmal.engine.handlers.misc.Movement;
 import net.abysmal.engine.maths.Hitbox;
 import net.abysmal.engine.maths.Vector;
@@ -12,8 +12,7 @@ public class Projectile extends net.abysmal.engine.entities.Projectile<Tower>{
 
 	public static ArrayList<Projectile> projectileTypes = new ArrayList<Projectile>();
 	public static ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
-	private Vector target;
-	public URL textureURL = ClassLoader.getSystemResource("projectile/canonball.png");
+	public Vector target;
 	
 	public Projectile(int id, int speed, HugeInteger damage, String texture, Hitbox hitbox) {
 		super(id, speed, 0, damage, texture, hitbox);
