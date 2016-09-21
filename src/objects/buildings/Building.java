@@ -87,7 +87,7 @@ public class Building {
 					if (Main.currentTrack.world.tiles[1][gridIndex].getTraits()[0] == "buildable" && Main.currentTrack.world.tiles[0][gridIndex].getTraits()[0] != "obstacle") {
 						Building bClone = null;
 						if (Main.selectedBuildingType == 0 && (Main.currentTrack.buildings[gridIndex] instanceof Block && ((Block) Main.currentTrack.buildings[gridIndex]).viableSupport(Main.selectedBuildingID)) && ((Block) Main.currentTrack.buildings[gridIndex]).tower == null) {
-							((Block) Main.currentTrack.buildings[gridIndex]).tower = new Tower(Tower.towers.get(Main.selectedBuildingID));
+							((Block) Main.currentTrack.buildings[gridIndex]).tower = new Tower(Tower.towers.get(Main.selectedBuildingID), gridIndex);
 							Player.money.sub(Tower.towers.get(Main.selectedBuildingID).cost);
 						} else if (Main.selectedBuildingType == 1 && Main.currentTrack.buildings[gridIndex] == null) {
 							bClone = new Block((Block) Building.getBuildingList(Main.selectedBuildingType).get(Main.selectedBuildingID));

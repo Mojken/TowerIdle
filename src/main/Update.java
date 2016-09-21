@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import net.abysmal.engine.entities.Entity;
 import net.abysmal.engine.graphics.Graphics;
 import net.abysmal.engine.graphics.Window;
 import net.abysmal.engine.graphics.geometry.Square;
@@ -54,19 +55,14 @@ public class Update implements Tick {
 					// }
 				}
 			}
-			if (main.w.keyboardListener.getCurrentlyPressedKeys()[KeyEvent.VK_SPACE][0] == 1 && shot == 0) {
 
-				shoot = true;
-			}
-
-			if (shoot || skip) {
+			if (shot == 0 || skip) {
 				if (!reading) {
 					for (Building b:Main.currentTrack.buildings) {
 						if (b instanceof Block && ((Block) b).tower != null) {
 							Tower source = ((Block) b).tower;
-							Vector target = main.w.mouseListener.getMousePosition();
 							Projectile p = Projectile.projectileTypes.get(0);
-							p.shoot(Main.currentTrack.grid.getGridCoordinate(b.gridIndex).add(Main.currentTrack.tileSize.toVector().multiply(.5f)).add(main.track.a), source, target);
+							p.shoot(Main.currentTrack.grid.getGridCoordinate(b.gridIndex).add(Main.currentTrack.tileSize.toVector().multiply(.5f)), source);
 						}
 					}
 					shot = 1;
@@ -81,9 +77,8 @@ public class Update implements Tick {
 			if (shot > 0) shot++;
 			if (shot >= 100) shot = 0;
 
-			for (Projectile p:Projectile.projectiles) {
-				// System.out.println(p.target);
-				p.move();
+			for (Entity e:Main.currentTrack.entities) {
+				e.move();
 			}
 		}
 	}
@@ -119,14 +114,14 @@ public class Update implements Tick {
 		}
 		drawOnHover(g);
 		reading = true;
-		for (Projectile p:Projectile.projectiles) {
-			if (p == null) continue;
+		for (Entity e:Main.currentTrack.entities) {
+			if (e == null) continue;
 			try {
-				if (null == p.textureURL || p.pos == null) continue;
-				g.drawImage(ImageIO.read(p.textureURL), p.pos.add(p.hitbox.getHitboxPoints()[0].multiply(2.5f)));
-			} catch (IOException e) {
+				if (null == e.textureURL || e.pos == null) continue;
+				g.drawImage(ImageIO.read(e.textureURL), e.pos.add(e.hitbox.getHitboxPoints()[0].multiply(2.5f)).add(main.track.a), e.hitbox.getHitboxPoints()[1].multiply(2.5f));
+			} catch (IOException ex) {
 				System.out.println("Projectile image failed to load");
-				e.printStackTrace();
+				ex.printStackTrace();
 			}
 		}
 		reading = false;

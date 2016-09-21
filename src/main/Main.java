@@ -8,6 +8,7 @@ import net.abysmal.engine.graphics.Window;
 import net.abysmal.engine.graphics.geometry.Square;
 import net.abysmal.engine.handlers.misc.Settings;
 import net.abysmal.engine.maths.Dimension;
+import objects.entities.Mob;
 import objects.tracks.First;
 import objects.tracks.Track;
 
@@ -44,6 +45,7 @@ public class Main {
 		Settings.setDvorak();
 		currentTrack = new First(new Dimension((int) (Window.width * widthPartition), (int) (Window.height * heightPartition)));
 		setupPartitions();
+		currentTrack.entities.add(new Mob(currentTrack.grid.getGridCoordinate(76).add(track.a), Mob.mobTypes.get(0)));
 		initialized = true;
 	}
 

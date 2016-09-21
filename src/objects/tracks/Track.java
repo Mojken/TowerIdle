@@ -14,7 +14,7 @@ public class Track {
 	int towersAllowed; // Zero for no limit
 	public World world;
 	public Grid grid;
-	public ArrayList<Entity> Entities = new ArrayList<Entity>();
+	public ArrayList<Entity> entities = new ArrayList<Entity>();
 	public Building[] buildings;
 	public Dimension tileSize, mapSize;
 
