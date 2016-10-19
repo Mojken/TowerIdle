@@ -23,7 +23,10 @@ public class Path {
 	public void calculatePath(Track track) {
 		for (int w = 0; w < weights.length; w++) {
 			if (track.buildings[w] == null) weights[w] = -1;
-			else weights[w] = track.buildings[w].weight;
+			else{
+				weights[w] = track.buildings[w].weight;
+				System.out.println(track.buildings[w].weight);
+			}
 		}
 		for (int w = 0; w < weights.length; w++) {
 			if (weights[w] == -1) {
@@ -37,7 +40,7 @@ public class Path {
 			traversable[t] = true;
 			for (int layer = 0; layer < 3; layer++) {
 				for (String s:track.world.tiles[layer][t].getTraits()) {
-					if (s == "nontraversable") {
+					if (s == "nontraversable" || s == "obstacle") {
 						traversable[t] = false;
 					}
 				}

@@ -32,11 +32,12 @@ public class Mob extends Entity {
 		super(new Vector(position.x, position.y), 0, mobType.hitbox, mobType.textureStr);
 		hitbox = new Hitbox(mobType);
 		this.textureURL = mobType.textureURL;
-		this.income = mobType.income;
+		this.income = mobType.income.clone();
+		this.health = mobType.health.clone();
 		currentHealth = mobType.health.clone();
-		this.armor = mobType.armor;
+		this.armor = mobType.armor.clone();
 		this.speed = mobType.speed;
-		this.damage = mobType.damage;
+		this.damage = mobType.damage.clone();
 		this.resistanceID = mobType.resistanceID;
 		this.resistanceAmount = mobType.resistanceAmount;
 	}

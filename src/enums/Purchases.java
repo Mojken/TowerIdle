@@ -3,6 +3,7 @@ package enums;
 import net.abysmal.engine.utils.HugeInteger;
 import objects.blocks.Block;
 import objects.buildings.Building;
+import objects.entities.Mob;
 import objects.towers.Tower;
 import values.researches.Research;
 
@@ -11,10 +12,11 @@ public enum Purchases {
 	/* Types: 0: Towers 1: Blocks 2: Building */
 // new HugeInteger((short))
 
-	basicTower(0, 1, new HugeInteger((short) 45), new HugeInteger((short) 10), 0, 130, 2000, 0, "basic"),
+	basicTower(0, 1, new HugeInteger((short) 45), new HugeInteger((short) 10), 0, 0, 130, 2000, 0, "basic", true),
 	woodenBlock(1, 1, 10, new HugeInteger((short) 5), new HugeInteger((short) 50), 0, 0, "wooden"),
 	zombie(true, new HugeInteger((short) 50), 0, "zombieUnlock"),
-	;
+	//TODO Balance
+	trap(0, 1, new HugeInteger((short) 1), new HugeInteger((short) 10), 1, -50000, 8, 120, 1, "trap", false);
 
 	final public int type, id, researchID, strenght, requiredStrenght, weight;
 	final public boolean isResearch;
@@ -23,7 +25,7 @@ public enum Purchases {
 	final public Tower tower;
 	final public Block block;
 	final public Building building;
-	final public Research research;
+	final public Research<Mob> research;
 
 	private Purchases(int type, int strenght, int weight, HugeInteger cost, HugeInteger health, int researchID, int id, String path) {
 		tower = null;
@@ -43,12 +45,12 @@ public enum Purchases {
 		Building.buildings.add(block);
 	}
 
-	private Purchases(int type, int strength, HugeInteger cost, HugeInteger health, int researchID, int radius, int attackSpeed, int id, String path) {
-		tower = new Tower(strength, 0, cost, health, researchID, radius, attackSpeed, id, path);
+	private Purchases(int type, int strength, HugeInteger cost, HugeInteger health, int researchID, int weight, int radius, int attackSpeed, int id, String path, boolean requiresBlock) {
+		tower = new Tower(strength, weight, cost, health, researchID, radius, attackSpeed, id, path, requiresBlock);
 		block = null;
 		building = null;
 		research = null;
-		weight = 0;
+		this.weight = weight;
 		this.type = type;
 		this.id = id;
 		this.researchID = researchID;
@@ -82,7 +84,7 @@ public enum Purchases {
 
 	private Purchases(boolean isResearch, HugeInteger cost, int[] prerequisits, int id, String path) {
 		if (isResearch) {
-			research = new Research(cost, prerequisits, path);
+			research = new Research<Mob>(cost, prerequisits, path);
 			this.cost = cost;
 			this.path = path;
 			this.id = id;
@@ -116,7 +118,7 @@ public enum Purchases {
 
 	private Purchases(boolean isResearch, HugeInteger cost, int prerequisits, int id, String path) {
 		if (isResearch) {
-			research = new Research(cost, prerequisits, path);
+			research = new Research<Mob>(cost, prerequisits, path);
 			this.cost = cost;
 			this.path = path;
 			this.id = id;
@@ -150,7 +152,7 @@ public enum Purchases {
 
 	private Purchases(boolean isResearch, HugeInteger cost, int id, String path) {
 		if (isResearch) {
-			research = new Research(cost, path);
+			research = new Research<Mob>(cost, path);
 			this.cost = cost;
 			this.path = path;
 			this.id = id;

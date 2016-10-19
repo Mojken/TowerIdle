@@ -11,6 +11,7 @@ import net.abysmal.engine.handlers.misc.Button;
 import net.abysmal.engine.handlers.misc.Settings;
 import net.abysmal.engine.maths.Dimension;
 import objects.Spawner;
+import objects.towers.Tower;
 import objects.tracks.First;
 import objects.tracks.Track;
 
@@ -37,6 +38,7 @@ public class Main {
 		init();
 		Update.sp = new Spawner(Main.currentTrack);
 		initialized = true;
+		Tower.towers.forEach((v)->System.out.println(v.spritePath));
 	}
 
 	public void init() { // innit mate?
