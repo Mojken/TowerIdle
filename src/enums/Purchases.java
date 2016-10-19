@@ -11,21 +11,21 @@ public enum Purchases {
 	/* Types: 0: Towers 1: Blocks 2: Building */
 // new HugeInteger((short))
 
-	basicTower(0, 1, new HugeInteger((short) 50), new HugeInteger((short) 45), new HugeInteger((short) 10), 0, 2000, 0, "basic"),
-	woodenBlock(1, 1, new HugeInteger((short) 10), new HugeInteger((short) 5), new HugeInteger((short) 50), 0, 0, "wooden"),
-	zombie(true, new HugeInteger((short) 50), 0, "zombieUnlock");
+	basicTower(0, 1, new HugeInteger((short) 45), new HugeInteger((short) 10), 0, 130, 2000, 0, "basic"),
+	woodenBlock(1, 1, 10, new HugeInteger((short) 5), new HugeInteger((short) 50), 0, 0, "wooden"),
+	zombie(true, new HugeInteger((short) 50), 0, "zombieUnlock"),
+	;
 
-	final public int type, id, researchID, strenght, requiredStrenght;
+	final public int type, id, researchID, strenght, requiredStrenght, weight;
 	final public boolean isResearch;
 	final public String path;
-	final public HugeInteger cost, weight;
+	final public HugeInteger cost;
 	final public Tower tower;
 	final public Block block;
 	final public Building building;
 	final public Research research;
 
-	private Purchases(int type, int strenght, HugeInteger weight, HugeInteger cost, HugeInteger health, int researchID, int id, String path) {
-		if (type > 1) System.err.println("INCORRECT SYNTAX ON " + name());
+	private Purchases(int type, int strenght, int weight, HugeInteger cost, HugeInteger health, int researchID, int id, String path) {
 		tower = null;
 		block = new Block(strenght, weight, cost, health, researchID, id, path);
 		building = null;
@@ -43,11 +43,12 @@ public enum Purchases {
 		Building.buildings.add(block);
 	}
 
-	private Purchases(int type, int strength, HugeInteger weight, HugeInteger cost, HugeInteger health, int researchID, int radius, int id, String path) {
-		tower = new Tower(strength, weight, cost, health, researchID, radius, id, path);
+	private Purchases(int type, int strength, HugeInteger cost, HugeInteger health, int researchID, int radius, int attackSpeed, int id, String path) {
+		tower = new Tower(strength, 0, cost, health, researchID, radius, attackSpeed, id, path);
 		block = null;
 		building = null;
 		research = null;
+		weight = 0;
 		this.type = type;
 		this.id = id;
 		this.researchID = researchID;
@@ -56,12 +57,11 @@ public enum Purchases {
 		this.cost = cost;
 		this.strenght = -1;
 		this.requiredStrenght = strenght;
-		this.weight = weight;
 		Tower.towers.add(tower);
 		Building.buildings.add(tower);
 	}
 
-	private Purchases(int type, HugeInteger cost, HugeInteger weight, HugeInteger health, int researchID, int id, String path) {
+	private Purchases(int type, HugeInteger cost, int weight, HugeInteger health, int researchID, int id, String path) {
 		if (type != 2) System.err.println("INCORRECT SYNTAX ON " + name());
 		tower = null;
 		block = null;
@@ -94,8 +94,8 @@ public enum Purchases {
 			this.researchID = -1;
 			this.strenght = -1;
 			this.requiredStrenght = -1;
-			this.weight = null;
-			Research.researches.add(research);
+			this.weight = 0;
+//			Research.researches.add(research);
 		} else {
 			System.err.println("Why do you have a 'false' at the start of your research?");
 			tower = null;
@@ -110,7 +110,7 @@ public enum Purchases {
 			this.cost = null;
 			this.strenght = -1;
 			this.requiredStrenght = -1;
-			this.weight = null;
+			this.weight = 0;
 		}
 	}
 
@@ -128,8 +128,8 @@ public enum Purchases {
 			this.researchID = -1;
 			this.strenght = -1;
 			this.requiredStrenght = -1;
-			this.weight = null;
-			Research.researches.add(research);
+			this.weight = 0;
+//			Research.researches.add(research);
 		} else {
 			System.err.println("Why do you have a 'false' at the start of your research?");
 			tower = null;
@@ -144,7 +144,7 @@ public enum Purchases {
 			this.cost = null;
 			this.strenght = -1;
 			this.requiredStrenght = -1;
-			this.weight = null;
+			this.weight = 0;
 		}
 	}
 
@@ -162,8 +162,8 @@ public enum Purchases {
 			this.researchID = -1;
 			this.strenght = -1;
 			this.requiredStrenght = -1;
-			this.weight = null;
-			Research.researches.add(research);
+			this.weight = 0;
+//			Research.researches.add(research);
 		} else {
 			System.err.println("Why do you have a 'false' at the start of your research?");
 			tower = null;
@@ -178,7 +178,7 @@ public enum Purchases {
 			this.cost = null;
 			this.strenght = -1;
 			this.requiredStrenght = -1;
-			this.weight = null;
+			this.weight = 0;
 		}
 	}
 

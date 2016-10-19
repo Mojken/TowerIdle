@@ -8,13 +8,13 @@ import net.abysmal.engine.maths.Dimension;
 import net.abysmal.engine.utils.HugeInteger;
 
 public class First extends Track {
-
+	
 	public static HugeInteger price = new HugeInteger();
 	public static int towersAllowed = 0;
+	BufferedImage map;
 
 	public First(Dimension partitionSize) {
 		super(price, towersAllowed);
-		BufferedImage map;
 		try {
 			map = ImageIO.read(ClassLoader.getSystemResource("tracks/first.png"));
 		} catch (IOException e2) {

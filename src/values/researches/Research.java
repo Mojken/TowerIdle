@@ -3,11 +3,11 @@ package values.researches;
 import java.util.ArrayList;
 import net.abysmal.engine.utils.HugeInteger;
 
-public class Research {
+public class Research<Mob> {
 	
 	HugeInteger cost;
 	int[] prerequisits;
-	public static ArrayList<Research> researches = new ArrayList<Research>();
+	public ArrayList<Research<Mob>> researches = new ArrayList<Research<Mob>>();
 	public String spritePath;
 	
 	public Research(HugeInteger cost, int[] prerequisits, String spritePath) {

@@ -11,7 +11,7 @@ public class Block extends Building {
 	public static ArrayList<Block> blocks = new ArrayList<Block>();
 	public Tower tower;
 	
-	public Block(int strength, HugeInteger weight, HugeInteger cost, HugeInteger health, int researchID, int ID, String spritePath) {
+	public Block(int strength, int weight, HugeInteger cost, HugeInteger health, int researchID, int ID, String spritePath) {
 		super(cost, weight, health, researchID, ID, spritePath, 1);
 		this.strength = strength;
 	}

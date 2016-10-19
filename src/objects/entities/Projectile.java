@@ -8,29 +8,40 @@ import net.abysmal.engine.maths.Vector;
 import net.abysmal.engine.utils.HugeInteger;
 import objects.towers.Tower;
 
-public class Projectile extends net.abysmal.engine.entities.Projectile<Tower>{
+public class Projectile extends net.abysmal.engine.entities.Projectile<Tower> {
 
 	public static ArrayList<Projectile> projectileTypes = new ArrayList<Projectile>();
 	public Vector target;
-	
+	public int id = -1;
+
 	public Projectile(int id, int speed, HugeInteger damage, String texture, Hitbox hitbox) {
 		super(id, speed, 0, damage, texture, hitbox);
 	}
-	
-	public Projectile(Vector pos, Projectile type, Tower source, double angle){
+
+	public Projectile(Vector pos, Projectile type, Tower source, Vector targetPos, int id) {
 		super(pos, type, source);
-		this.angle = angle;
+		this.angle = targetPos.sub(pos).calculateAngle();
+		this.id = id;
 	}
-	
-	public void shoot(Vector pos, Tower source) {
-		double angle = source.getTarget();
-		if (angle == 13.37) return;
-		Main.currentTrack.entities.add(new Projectile(pos, this, source, angle));
+
+	public boolean shoot(Vector pos, Tower source) {
+		if(null == source.getTarget()) return false;
+		int id = Main.currentTrack.entities.size();
+		Main.currentTrack.entities.add(new Projectile(pos, this, source, source.getTarget().pos, id));
+		return true;
 	}
-	
-	@Override
-	public void move(){
+
+	public boolean move() {
 		Movement.moveInAngleWithRotation(angle, this, 0, speed);
+		Vector p = Main.currentTrack.mapSize.toVector().multiply(Main.currentTrack.tileSize.toVector());
+		if (pos.x > p.x || pos.x < -16 || pos.y > p.y || pos.y < -16) {
+			return false;
+		}
+		return true;
 	}
 	
+	public static void destroy(Projectile p) {
+		Main.currentTrack.entities.remove(p.id);
+	}
+
 }

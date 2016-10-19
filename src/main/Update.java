@@ -4,15 +4,21 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import javax.imageio.ImageIO;
+import net.abysmal.engine.GlobalVariables;
 import net.abysmal.engine.entities.Entity;
 import net.abysmal.engine.graphics.Graphics;
 import net.abysmal.engine.graphics.Window;
 import net.abysmal.engine.graphics.geometry.Square;
+import net.abysmal.engine.handlers.misc.Button;
 import net.abysmal.engine.handlers.misc.Tick;
 import net.abysmal.engine.maths.Vector;
+import net.abysmal.engine.utils.HugeInteger;
+import objects.Spawner;
 import objects.blocks.Block;
 import objects.buildings.Building;
+import objects.entities.Mob;
 import objects.entities.Projectile;
 import objects.towers.Tower;
 import values.Player;
@@ -20,9 +26,10 @@ import values.Player;
 public class Update implements Tick {
 
 	Main main;
-	boolean lastInput, reading, skip, shoot;
-	int shot = 0;
+	boolean lastInput, reading, clearMobs;
 	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
+	public static Spawner sp;
+	float incomeFactor = 1;
 
 	public Update(Main main) {
 		this.main = main;
@@ -37,6 +44,7 @@ public class Update implements Tick {
 				if (main.track.isWithin(main.w.mouseListener.getMousePosition())) {
 					// if(buildingSelected){
 					Building.placeBuilding(main.w.mouseListener.getMousePosition().sub(main.track.a));
+					Main.currentTrack.path.calculatePath(Main.currentTrack);
 					// }
 				}
 			}
@@ -48,38 +56,71 @@ public class Update implements Tick {
 						if (b0 != null) {
 							for (Building b1:Main.currentTrack.buildings) {
 								if (b1 == null) continue;
-								if (b0.ID == b1.ID && b0.type == b1.type) Building.sellBuilding(Main.currentTrack.grid.getGridCoordinate(b1.gridIndex));
+								if (b0.ID == b1.ID && b0.type == b1.type) {
+									Building.sellBuilding(Main.currentTrack.grid.getGridCoordinate(b1.gridIndex));
+									Main.currentTrack.path.calculatePath(Main.currentTrack);
+								}
 							}
 						}
-					} else Building.sellBuilding(main.w.mouseListener.getMousePosition().sub(main.track.a));
+					} else {
+						Building.sellBuilding(main.w.mouseListener.getMousePosition().sub(main.track.a));
+						Main.currentTrack.path.calculatePath(Main.currentTrack);
+					}
 					// }
 				}
 			}
 
-			if (shot == 0 || skip) {
-				if (!reading) {
-					for (Building b:Main.currentTrack.buildings) {
-						if (b instanceof Block && ((Block) b).tower != null) {
-							Tower source = ((Block) b).tower;
-							Projectile p = Projectile.projectileTypes.get(0);
-							p.shoot(Main.currentTrack.grid.getGridCoordinate(b.gridIndex).add(Main.currentTrack.tileSize.toVector().multiply(.5f)), source);
-						}
-					}
-					shot = 1;
-					shoot = false;
-					skip = false;
-				} else {
-					skip = true;
+			for (Building b:Main.currentTrack.buildings) {
+				if (b instanceof Block && ((Block) b).tower != null) {
+					Tower t = ((Block) b).tower;
+					t.update();
 				}
 			}
 
 			lastInput = main.w.mouseListener.getClickInfo()[1][4] == 1;
-			if (shot > 0) shot++;
-			if (shot >= 100) shot = 0;
 
-			for (Entity e:Main.currentTrack.entities) {
-				e.move();
+			if (Main.currentTrack.lastEscaped > 0) {
+				Main.currentTrack.lastEscaped--;
+				incomeFactor = .2f;
+			} else incomeFactor = 1;
+
+			if (main.buttons[0].update(main.w.mouseListener)) {
+				clearMobs = true;
+				Main.currentTrack.lastEscaped = Main.currentTrack.cooldown * 10;
 			}
+
+			Iterator<Entity> i = Main.currentTrack.entities.iterator();
+			while (i.hasNext()) {
+				Entity e = i.next();
+				e.kill = !e.move();
+
+				if (e instanceof Projectile) {
+					for (Entity mob:Main.currentTrack.entities) {
+						if (mob instanceof Mob) {
+							if (new Square(e.hitbox.getHitboxPoints()[0].add(e.pos), e.hitbox.getHitboxPoints()[1].add(e.pos)).isWithin(mob)) {
+								e.kill = true;
+								((Mob) mob).currentHealth = ((Mob) mob).currentHealth.sub(((Projectile) e).hugeDamage);
+								break;
+							}
+						}
+					}
+				}
+
+				if (e instanceof Mob && !((Mob) e).currentHealth.largerThanOrEqualTo(new HugeInteger((short) 1))) {
+					e.kill = true;
+				}
+// TODO implement visual feedback (?)
+				if (e.kill) {
+					if (e instanceof Mob) {
+						Player.money.add(((Mob) e).income.mult(incomeFactor));
+					}
+					i.remove();
+				}
+				if (clearMobs && e instanceof Mob) i.remove();
+
+			}
+			clearMobs = false;
+			sp.update();
 		}
 	}
 
@@ -88,12 +129,17 @@ public class Update implements Tick {
 		if (Main.initialized) {
 			Graphics g = new Graphics(g2);
 			g2.clearRect(0, 0, Window.width, Window.height);
-			for (Square p:main.partition.partitions) {
-				g.drawRect(p.a, p.b);
-			}
+
 			drawGame(g);
 			g2.drawString("Money: " + Player.money, (int) main.money.a.x, (int) main.money.b.y);
 			g2.drawString("Research: " + Player.research, (int) main.research.a.x, (int) main.research.b.y);
+			g2.drawString("Clear mobs", (int) (main.save.a.x + ((main.save.b.x - main.save.a.x) / 2)) - 40, (int) (main.save.a.y + ((main.save.b.y - main.save.a.y) / 2)) + 5);
+
+			for (Button b:main.buttons) {
+				g.drawRoundRect(b.bounds.a, b.bounds.b, new Vector(10, 10));
+			}
+
+			drawDebug(g, g2);
 			g.dispose();
 		}
 	}
@@ -118,13 +164,14 @@ public class Update implements Tick {
 			if (e == null) continue;
 			try {
 				if (null == e.textureURL || e.pos == null) continue;
-				g.drawImage(ImageIO.read(e.textureURL), e.pos.add(e.hitbox.getHitboxPoints()[0].multiply(2.5f)).add(main.track.a), e.hitbox.getHitboxPoints()[1].multiply(2.5f));
+				g.drawImage(ImageIO.read(e.textureURL), e.pos.add(e.hitbox.getHitboxPoints()[0]).add(main.track.a), e.hitbox.getHitboxPoints()[1].multiply(2.5f));
 			} catch (IOException ex) {
 				System.out.println("Projectile image failed to load");
 				ex.printStackTrace();
 			}
 		}
 		reading = false;
+
 	}
 
 	public void drawOnHover(Graphics g) {
@@ -148,6 +195,36 @@ public class Update implements Tick {
 			} else g.setColor(new Color(0x70FF0000, true));
 			g.fillRect(tile, Main.currentTrack.tileSize.toVector().add(tile));
 			g.setColor(Color.BLACK);
+		}
+	}
+
+	public void drawDebug(Graphics g, java.awt.Graphics g2) {
+		if (GlobalVariables.debug) {
+
+			for (Square p:main.partition.partitions) {
+				g.drawRect(p.a, p.b);
+			}
+
+			for (Building b:Main.currentTrack.buildings) {
+				if (b instanceof Block && ((Block) b).tower != null) {
+					Tower t = ((Block) b).tower;
+					Vector pos = Main.currentTrack.grid.getGridCoordinate(t.gridIndex).add(main.track.a).add(Main.currentTrack.grid.tileSize.toVector().multiply(.5f));
+					g2.drawString(t.cooldown + "", (int) (pos.x), (int) (pos.y));
+					g.drawOval(pos.add(-t.radius), new Vector(t.radius * 2, t.radius * 2));
+					Entity target = t.getTarget();
+					if (null != target) g.drawLine(pos, target.pos.add(main.track.a));
+				}
+			}
+
+			for (int nodeIndex = 0; nodeIndex < Main.currentTrack.path.getLength(); nodeIndex++) {
+				g.fillRect(Main.currentTrack.path.getNodePos(nodeIndex).add(-3f).add(main.track.a), Main.currentTrack.path.getNodePos(nodeIndex).add(3f).add(main.track.a));
+				if (nodeIndex == Main.currentTrack.path.getLength() - 1) continue;
+				g.drawLine(Main.currentTrack.path.getNodePos(nodeIndex).add(main.track.a), Main.currentTrack.path.getNodePos(nodeIndex + 1).add(main.track.a));
+			}
+
+			for (Entity e:Main.currentTrack.entities) {
+				if (GlobalVariables.debug) g.drawRect(e.pos.add(main.track.a).add(e.hitbox.getHitboxPoints()[0]), e.pos.add(main.track.a).add(e.hitbox.getHitboxPoints()[1]));
+			}
 		}
 	}
 }

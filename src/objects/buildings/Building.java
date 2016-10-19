@@ -12,14 +12,14 @@ import values.Player;
 
 public class Building {
 
-	public HugeInteger weight, cost, health;
-	public int researchID, ID;
+	public HugeInteger cost, health;
+	public int researchID, ID, weight;
 	public static ArrayList<Building> buildings = new ArrayList<Building>();
 	public String spritePath;
 	public int type;
 	public int gridIndex;
 
-	public Building(HugeInteger cost, HugeInteger weight, HugeInteger health, int researchID, int ID, String spritePath) {
+	public Building(HugeInteger cost, int weight, HugeInteger health, int researchID, int ID, String spritePath) {
 		this.weight = weight;
 		this.cost = cost;
 		this.researchID = researchID;
@@ -29,7 +29,7 @@ public class Building {
 		this.type = 2;
 	}
 
-	public Building(HugeInteger cost, HugeInteger weight, HugeInteger health, int researchID, int ID, String spritePath, int type) {
+	public Building(HugeInteger cost, int weight, HugeInteger health, int researchID, int ID, String spritePath, int type) {
 		this.weight = weight;
 		this.cost = cost;
 		this.researchID = researchID;
@@ -107,8 +107,8 @@ public class Building {
 		int gridIndex = Main.currentTrack.grid.getGridIndex(Main.currentTrack.grid.getGridCoordinate(pos));
 		if (Main.currentTrack.buildings[gridIndex] != null) {
 			if (Main.currentTrack.world.tiles[1][gridIndex].getTraits() != null && Main.currentTrack.world.tiles[0][gridIndex].getTraits() != null) {
-			if (Main.currentTrack.world.tiles[1][gridIndex].getTraits()[0] == "buildable" && Main.currentTrack.world.tiles[0][gridIndex].getTraits()[0] != "obstacle") {
-				if (Main.currentTrack.buildings[gridIndex] instanceof Block && ((Block) Main.currentTrack.buildings[gridIndex]).tower != null) Player.money.add(((Block) Main.currentTrack.buildings[gridIndex]).tower.cost);
+				if (Main.currentTrack.world.tiles[1][gridIndex].getTraits()[0] == "buildable" && Main.currentTrack.world.tiles[0][gridIndex].getTraits()[0] != "obstacle") {
+					if (Main.currentTrack.buildings[gridIndex] instanceof Block && ((Block) Main.currentTrack.buildings[gridIndex]).tower != null) Player.money.add(((Block) Main.currentTrack.buildings[gridIndex]).tower.cost);
 					Player.money.add(Main.currentTrack.buildings[gridIndex].cost);
 					Main.currentTrack.buildings[gridIndex] = null;
 				}

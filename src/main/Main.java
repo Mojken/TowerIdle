@@ -3,25 +3,28 @@ package main;
 import enums.Entities;
 import enums.Purchases;
 import enums.Tiles;
+import net.abysmal.engine.GlobalVariables;
 import net.abysmal.engine.graphics.Partition;
 import net.abysmal.engine.graphics.Window;
 import net.abysmal.engine.graphics.geometry.Square;
+import net.abysmal.engine.handlers.misc.Button;
 import net.abysmal.engine.handlers.misc.Settings;
 import net.abysmal.engine.maths.Dimension;
-import objects.entities.Mob;
+import objects.Spawner;
 import objects.tracks.First;
 import objects.tracks.Track;
 
 public class Main {
 
 	Window w;
-	Partition partition, moneyPartition;
-	public Square money, research, menu, save, towers, track;
+	Partition partition, moneyPartition, tabPartition;
+	public Square money, research, tabs, save, towers, track, islandTab, researchTab, upgradeTab;
 	public static Track currentTrack;
 	int trackWidth, trackHeight, counter;
 	double widthPartition = .7, heightPartition = .8;
 	public static boolean initialized = false;
 	public static int selectedBuildingID = 0, selectedBuildingType = 1;
+	public Button[] buttons;
 
 	public static void main(String[] args) {
 		new Main();
@@ -32,6 +35,8 @@ public class Main {
 		w.createWindow("Abysmal Tower", 1000);
 		w.start(new Update(this));
 		init();
+		Update.sp = new Spawner(Main.currentTrack);
+		initialized = true;
 	}
 
 	public void init() { // innit mate?
@@ -43,27 +48,31 @@ public class Main {
 			s.name();
 
 		Settings.setDvorak();
+		GlobalVariables.debug = true;
 		currentTrack = new First(new Dimension((int) (Window.width * widthPartition), (int) (Window.height * heightPartition)));
 		setupPartitions();
-		currentTrack.entities.add(new Mob(currentTrack.grid.getGridCoordinate(76).add(track.a), Mob.mobTypes.get(0)));
-		initialized = true;
+		buttons = new Button[] { new Button(save), new Button(islandTab), new Button(researchTab), new Button(upgradeTab) };
 	}
 
 	private void setupPartitions() {
 		Dimension d = new Dimension(Window.width, Window.height);
 		partition = new Partition(new double[] { 0, 0.2, heightPartition, 1 }, new double[] { 0, 0.1, widthPartition, 1 }, d);
 		moneyPartition = new Partition(new double[] { 0.05, 1 }, new double[] { 0, 0.4, 0.8, 1 }, partition.partitions[0].d);
-		assignPartitions(partition.partitions, moneyPartition.partitions);
+		tabPartition = new Partition(new double[] { 0, 1 / 3.0, 2 / 3.0, 1 }, new double[] { 0, 1 }, partition.partitions[1].d);
+		assignPartitions(partition.partitions, moneyPartition.partitions, tabPartition.partitions);
 	}
 
 	int lastInput;
 
-	private void assignPartitions(Square[] p, Square[] pm) {
-		money = pm[0];
-		menu = p[1];
+	private void assignPartitions(Square[] p, Square[] pm, Square[] pt) {
+		tabs = p[1];
 		save = p[2];
 		towers = p[3];
-		track = new Square(p[4].a, currentTrack.grid.getSize().add(p[4].a));
+		money = pm[0];
 		research = pm[1];
+		track = new Square(p[4].a, currentTrack.grid.getSize().add(p[4].a));
+		islandTab = new Square (pt[0].a.add(tabs.a), pt[0].b.add(tabs.a));
+		researchTab = new Square (pt[1].a.add(tabs.a), pt[1].b.add(tabs.a));
+		upgradeTab = new Square (pt[2].a.add(tabs.a), pt[2].b.add(tabs.a));
 	}
 }
