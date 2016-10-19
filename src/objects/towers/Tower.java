@@ -64,7 +64,6 @@ public class Tower extends Building {
 				if (!target.currentHealth.largerThanOrEqualTo(HugeInteger.ZERO)){
 					
 					money = target.health.mult(.5f);
-					System.out.println(money);
 					Iterator<Entity> i = Main.currentTrack.entities.iterator();
 					while (i.hasNext()){
 						if (target.equals(i.next())){
