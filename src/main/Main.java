@@ -3,7 +3,7 @@ package main;
 import enums.Entities;
 import enums.Purchases;
 import enums.Tiles;
-import net.abysmal.engine.GlobalVariables;
+import menues.Research;
 import net.abysmal.engine.graphics.Partition;
 import net.abysmal.engine.graphics.Window;
 import net.abysmal.engine.graphics.geometry.Square;
@@ -11,9 +11,9 @@ import net.abysmal.engine.handlers.misc.Button;
 import net.abysmal.engine.handlers.misc.Settings;
 import net.abysmal.engine.maths.Dimension;
 import objects.Spawner;
-import objects.towers.Tower;
 import objects.tracks.First;
 import objects.tracks.Track;
+import values.researches.Researches;
 
 public class Main {
 
@@ -38,7 +38,6 @@ public class Main {
 		init();
 		Update.sp = new Spawner(Main.currentTrack);
 		initialized = true;
-		Tower.towers.forEach((v)->System.out.println(v.spritePath));
 	}
 
 	public void init() { // innit mate?
@@ -50,10 +49,12 @@ public class Main {
 			s.name();
 
 		Settings.setDvorak();
-		GlobalVariables.debug = true;
+//		GlobalVariables.debug = true;
 		currentTrack = new First(new Dimension((int) (Window.width * widthPartition), (int) (Window.height * heightPartition)));
 		setupPartitions();
 		buttons = new Button[] { new Button(save), new Button(islandTab), new Button(researchTab), new Button(upgradeTab) };
+		new Researches();
+		new Research();
 	}
 
 	private void setupPartitions() {

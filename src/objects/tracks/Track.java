@@ -10,7 +10,9 @@ import objects.Path;
 import objects.buildings.Building;
 
 public class Track {
-
+	
+	//TODO When adding more tracks, add here. Alternatively automate
+	public static final int TRACK_AMOUNT = 1;
 	public Path path;
 	HugeInteger price;
 	public int towersAllowed, lastEscaped = 0, cooldown = 1000; // Zero for no limit, cooldown - time since last mob escaped
@@ -19,10 +21,13 @@ public class Track {
 	public ArrayList<Entity> entities = new ArrayList<Entity>();
 	public Building[] buildings;
 	public Dimension tileSize, mapSize;
+	public boolean[] researches;
+	public int id;
 
-	public Track(HugeInteger price, int towersAllowed) {
+	public Track(HugeInteger price, int towersAllowed, int id) {
 		this.price = price;
 		this.towersAllowed = towersAllowed;
+		this.id = id;
 	}
 
 	protected void setWorld(World world, Dimension partitionSize) {

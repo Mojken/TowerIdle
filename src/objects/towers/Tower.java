@@ -55,7 +55,7 @@ public class Tower extends Building {
 
 	public void update() {
 		if (cooldown == 0) {
-			if (this.ID == Purchases.trap.id) {
+			if (this.ID == Purchases.researchFacility.id) {
 				Mob target = getTarget();
 				if(null == target) return;
 				int in = target.currentHealth.number.get(0);
@@ -80,9 +80,9 @@ public class Tower extends Building {
 		} else{
 			cooldown--;
 			
-			if (money != null && cooldown%12 == 0){
+			if (money != null && cooldown%1000 == 0){
 				if(money.largerThanOrEqualTo(new HugeInteger((short)1))){
-					Player.money.add(new HugeInteger((short) 1));
+					Player.research.add(new HugeInteger((short) 1));
 					money.sub(new HugeInteger((short) 1));
 				}else{
 					money = null;

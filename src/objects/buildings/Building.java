@@ -50,20 +50,18 @@ public class Building {
 	}
 
 	public boolean locationValid(Track t, int gridIndex) {
-		if (t.buildings[gridIndex].equals(null) && t.world.tiles[1][gridIndex].getTraits()[0] == "buildable")
-			return true;
-		else
-			return false;
+		if (t.buildings[gridIndex].equals(null) && t.world.tiles[1][gridIndex].getTraits()[0] == "buildable") return true;
+		else return false;
 	}
 
 	public URL getFile() {
 		switch (type) {
-		case 0:
-			return ClassLoader.getSystemResource("towers/" + spritePath + ".png");
-		case 1:
-			return ClassLoader.getSystemResource("blocks/" + spritePath + ".png");
-		case 2:
-			return ClassLoader.getSystemResource("buildings/" + spritePath + ".png");
+			case 0:
+				return ClassLoader.getSystemResource("towers/" + spritePath + ".png");
+			case 1:
+				return ClassLoader.getSystemResource("blocks/" + spritePath + ".png");
+			case 2:
+				return ClassLoader.getSystemResource("buildings/" + spritePath + ".png");
 		}
 		return null;
 	}
@@ -71,12 +69,12 @@ public class Building {
 	@SuppressWarnings("rawtypes")
 	public static ArrayList getBuildingList(int type) {
 		switch (type) {
-		case 0:
-			return Tower.towers;
-		case 1:
-			return Block.blocks;
-		case 2:
-			return buildings;
+			case 0:
+				return Tower.towers;
+			case 1:
+				return Block.blocks;
+			case 2:
+				return buildings;
 		}
 		return null;
 	}
@@ -87,26 +85,23 @@ public class Building {
 			// Making sure you have enough money
 			if (Player.money.largerThanOrEqualTo(((Building) Building.getBuildingList(Main.selectedBuildingType).get(Main.selectedBuildingID)).cost)) {
 				if (Main.currentTrack.world.tiles[1][gridIndex].getTraits() != null && Main.currentTrack.world.tiles[0][gridIndex].getTraits() != null) {
-					// Making sure you can place building on current wheel
+					// Making sure you can place building on current tile
 					if (Main.currentTrack.world.tiles[1][gridIndex].getTraits()[0] == "buildable" && Main.currentTrack.world.tiles[0][gridIndex].getTraits()[0] != "obstacle") {
 						Building bClone = null;
 						if (Main.selectedBuildingType == 0) {
 							if (Tower.towers.get(Main.selectedBuildingID).requiresBlock && (Main.currentTrack.buildings[gridIndex] instanceof Block && ((Block) Main.currentTrack.buildings[gridIndex]).viableSupport(Main.selectedBuildingID)) && ((Block) Main.currentTrack.buildings[gridIndex]).tower == null) {
 								((Block) Main.currentTrack.buildings[gridIndex]).tower = new Tower(Tower.towers.get(Main.selectedBuildingID), gridIndex);
 								Player.money.sub(Tower.towers.get(Main.selectedBuildingID).cost);
-							}else if(!Tower.towers.get(Main.selectedBuildingID).requiresBlock && (Main.currentTrack.buildings[gridIndex] == null)){
-//								((Block) Main.currentTrack.buildings[gridIndex]).tower = new Tower(Tower.towers.get(Main.selectedBuildingID), gridIndex);
-//								Player.money.sub(Tower.towers.get(Main.selectedBuildingID).cost);
+								return;
+							} else if (!Tower.towers.get(Main.selectedBuildingID).requiresBlock && (Main.currentTrack.buildings[gridIndex] == null)) {
 								bClone = new Tower(Tower.towers.get(Main.selectedBuildingID), gridIndex);
 							}
 						} else if (Main.selectedBuildingType == 1 && Main.currentTrack.buildings[gridIndex] == null) {
 							bClone = new Block((Block) Building.getBuildingList(Main.selectedBuildingType).get(Main.selectedBuildingID));
 						}
-						if (bClone != null) {
-							bClone.gridIndex = gridIndex;
-							Main.currentTrack.buildings[bClone.gridIndex] = bClone;
-							Player.money.sub(bClone.cost);
-						}
+						bClone.gridIndex = gridIndex;
+						Main.currentTrack.buildings[bClone.gridIndex] = bClone;
+						Player.money.sub(bClone.cost);
 					}
 				}
 			}
@@ -118,8 +113,7 @@ public class Building {
 		if (Main.currentTrack.buildings[gridIndex] != null) {
 			if (Main.currentTrack.world.tiles[1][gridIndex].getTraits() != null && Main.currentTrack.world.tiles[0][gridIndex].getTraits() != null) {
 				if (Main.currentTrack.world.tiles[1][gridIndex].getTraits()[0] == "buildable" && Main.currentTrack.world.tiles[0][gridIndex].getTraits()[0] != "obstacle") {
-					if (Main.currentTrack.buildings[gridIndex] instanceof Block && ((Block) Main.currentTrack.buildings[gridIndex]).tower != null)
-						Player.money.add(((Block) Main.currentTrack.buildings[gridIndex]).tower.cost);
+					if (Main.currentTrack.buildings[gridIndex] instanceof Block && ((Block) Main.currentTrack.buildings[gridIndex]).tower != null) Player.money.add(((Block) Main.currentTrack.buildings[gridIndex]).tower.cost);
 					Player.money.add(Main.currentTrack.buildings[gridIndex].cost);
 					Main.currentTrack.buildings[gridIndex] = null;
 				}

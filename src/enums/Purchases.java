@@ -3,29 +3,32 @@ package enums;
 import net.abysmal.engine.utils.HugeInteger;
 import objects.blocks.Block;
 import objects.buildings.Building;
-import objects.entities.Mob;
 import objects.towers.Tower;
 import values.researches.Research;
 
-@SuppressWarnings("null")
 public enum Purchases {
-	/* Types: 0: Towers 1: Blocks 2: Building */
-// new HugeInteger((short))
-
+	// Tower
 	basicTower(0, 1, new HugeInteger((short) 45), new HugeInteger((short) 10), 0, 0, 130, 2000, 0, "basic", true),
-	woodenBlock(1, 1, 10, new HugeInteger((short) 5), new HugeInteger((short) 50), 0, 0, "wooden"),
-	zombie(true, new HugeInteger((short) 50), 0, "zombieUnlock"),
-	//TODO Balance
-	trap(0, 1, new HugeInteger((short) 1), new HugeInteger((short) 10), 1, -50000, 8, 120, 1, "trap", false);
 
+	// Block
+	woodenBlock(1, 1, 10, new HugeInteger((short) 5), new HugeInteger((short) 50), 0, 0, "wooden"),
+
+	// Research
+	zombie(new HugeInteger((short) 50), 0, "zombieUnlock"),
+
+	// Misc
+	researchFacility(0, 1, new HugeInteger((short) 200), new HugeInteger((short) 10), 1, 0, 8, 120, 1, "trap", false);
+	//heal towers
+	//functional tiles
+
+	// TODO remove for compacting
 	final public int type, id, researchID, strenght, requiredStrenght, weight;
-	final public boolean isResearch;
 	final public String path;
 	final public HugeInteger cost;
 	final public Tower tower;
 	final public Block block;
 	final public Building building;
-	final public Research<Mob> research;
+	final public Research research;
 
 	private Purchases(int type, int strenght, int weight, HugeInteger cost, HugeInteger health, int researchID, int id, String path) {
 		tower = null;
@@ -35,7 +38,6 @@ public enum Purchases {
 		this.type = type;
 		this.id = id;
 		this.researchID = researchID;
-		isResearch = false;
 		this.path = path;
 		this.cost = cost;
 		this.strenght = strenght;
@@ -54,7 +56,6 @@ public enum Purchases {
 		this.type = type;
 		this.id = id;
 		this.researchID = researchID;
-		isResearch = false;
 		this.path = path;
 		this.cost = cost;
 		this.strenght = -1;
@@ -72,7 +73,6 @@ public enum Purchases {
 		this.type = type;
 		this.id = id;
 		this.researchID = researchID;
-		isResearch = false;
 		this.path = path;
 		this.cost = cost;
 		this.strenght = -1;
@@ -82,106 +82,48 @@ public enum Purchases {
 
 	}
 
-	private Purchases(boolean isResearch, HugeInteger cost, int[] prerequisits, int id, String path) {
-		if (isResearch) {
-			research = new Research<Mob>(cost, prerequisits, path);
-			this.cost = cost;
-			this.path = path;
-			this.id = id;
-			this.isResearch = isResearch;
-			tower = null;
-			block = null;
-			building = null;
-			this.type = -1;
-			this.researchID = -1;
-			this.strenght = -1;
-			this.requiredStrenght = -1;
-			this.weight = 0;
-//			Research.researches.add(research);
-		} else {
-			System.err.println("Why do you have a 'false' at the start of your research?");
-			tower = null;
-			block = null;
-			building = null;
-			research = null;
-			this.type = -1;
-			this.id = -1;
-			this.researchID = -1;
-			this.isResearch = (Boolean) null;
-			this.path = null;
-			this.cost = null;
-			this.strenght = -1;
-			this.requiredStrenght = -1;
-			this.weight = 0;
-		}
+	private Purchases(HugeInteger cost, int[] prerequisits, int id, String path) {
+		research = new Research(cost, prerequisits, path);
+		this.cost = cost;
+		this.path = path;
+		this.id = id;
+		tower = null;
+		block = null;
+		building = null;
+		this.type = -1;
+		this.researchID = -1;
+		this.strenght = -1;
+		this.requiredStrenght = -1;
+		this.weight = 0;
 	}
 
-	private Purchases(boolean isResearch, HugeInteger cost, int prerequisits, int id, String path) {
-		if (isResearch) {
-			research = new Research<Mob>(cost, prerequisits, path);
-			this.cost = cost;
-			this.path = path;
-			this.id = id;
-			this.isResearch = isResearch;
-			tower = null;
-			block = null;
-			building = null;
-			this.type = -1;
-			this.researchID = -1;
-			this.strenght = -1;
-			this.requiredStrenght = -1;
-			this.weight = 0;
-//			Research.researches.add(research);
-		} else {
-			System.err.println("Why do you have a 'false' at the start of your research?");
-			tower = null;
-			block = null;
-			building = null;
-			research = null;
-			this.type = -1;
-			this.id = -1;
-			this.researchID = -1;
-			this.isResearch = (Boolean) null;
-			this.path = null;
-			this.cost = null;
-			this.strenght = -1;
-			this.requiredStrenght = -1;
-			this.weight = 0;
-		}
+	private Purchases(HugeInteger cost, int prerequisits, int id, String path) {
+		research = new Research(cost, prerequisits, path);
+		this.cost = cost;
+		this.path = path;
+		this.id = id;
+		tower = null;
+		block = null;
+		building = null;
+		this.type = -1;
+		this.researchID = -1;
+		this.strenght = -1;
+		this.requiredStrenght = -1;
+		this.weight = 0;
 	}
 
-	private Purchases(boolean isResearch, HugeInteger cost, int id, String path) {
-		if (isResearch) {
-			research = new Research<Mob>(cost, path);
-			this.cost = cost;
-			this.path = path;
-			this.id = id;
-			this.isResearch = isResearch;
-			tower = null;
-			block = null;
-			building = null;
-			this.type = -1;
-			this.researchID = -1;
-			this.strenght = -1;
-			this.requiredStrenght = -1;
-			this.weight = 0;
-//			Research.researches.add(research);
-		} else {
-			System.err.println("Why do you have a 'false' at the start of your research?");
-			tower = null;
-			block = null;
-			building = null;
-			research = null;
-			this.type = -1;
-			this.id = -1;
-			this.researchID = -1;
-			this.isResearch = (Boolean) null;
-			this.path = null;
-			this.cost = null;
-			this.strenght = -1;
-			this.requiredStrenght = -1;
-			this.weight = 0;
-		}
+	private Purchases(HugeInteger cost, int id, String path) {
+		research = new Research(cost, path);
+		this.cost = cost;
+		this.path = path;
+		this.id = id;
+		tower = null;
+		block = null;
+		building = null;
+		this.type = -1;
+		this.researchID = -1;
+		this.strenght = -1;
+		this.requiredStrenght = -1;
+		this.weight = 0;
 	}
-
 }

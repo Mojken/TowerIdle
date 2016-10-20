@@ -25,7 +25,6 @@ public class Path {
 			if (track.buildings[w] == null) weights[w] = -1;
 			else{
 				weights[w] = track.buildings[w].weight;
-				System.out.println(track.buildings[w].weight);
 			}
 		}
 		for (int w = 0; w < weights.length; w++) {

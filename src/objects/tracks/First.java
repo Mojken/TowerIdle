@@ -10,11 +10,11 @@ import net.abysmal.engine.utils.HugeInteger;
 public class First extends Track {
 	
 	public static HugeInteger price = new HugeInteger();
-	public static int towersAllowed = 0;
+	public static int towersAllowed = 0, id = 0;
 	BufferedImage map;
 
 	public First(Dimension partitionSize) {
-		super(price, towersAllowed);
+		super(price, towersAllowed, id);
 		try {
 			map = ImageIO.read(ClassLoader.getSystemResource("tracks/first.png"));
 		} catch (IOException e2) {
