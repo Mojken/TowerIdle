@@ -1,6 +1,5 @@
 package values.researches;
 
-import java.util.ArrayList;
 import net.abysmal.engine.utils.HugeInteger;
 
 public class Research {
@@ -8,8 +7,8 @@ public class Research {
 	HugeInteger cost;
 	int[] prerequisits;
 	int mobID, trackID, ID;
-	public ArrayList<Research> researches = new ArrayList<Research>();
 	public String spritePath;
+	boolean unlocked = false, maxed = false;
 	
 	public Research(HugeInteger cost, int[] prerequisits, String spritePath) {
 		this.cost = cost;
@@ -17,9 +16,9 @@ public class Research {
 		this.spritePath = spritePath;
 	}
 	
-	public Research(HugeInteger cost, int prerequisit, String spritePath) {
+	public Research(HugeInteger cost, int prerequisite, String spritePath) {
 		this.cost = cost;
-		prerequisits = new int[] {prerequisit};
+		prerequisits = new int[] {prerequisite};
 		this.spritePath = spritePath;
 	}
 	
@@ -28,4 +27,6 @@ public class Research {
 		prerequisits = new int[] {};
 		this.spritePath = spritePath;
 	}
+	
+	
 }
