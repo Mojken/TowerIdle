@@ -5,8 +5,10 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
+
 import javax.imageio.ImageIO;
-import menues.Research;
+import menues.ResearchMenu;
 import net.abysmal.engine.GlobalVariables;
 import net.abysmal.engine.entities.Entity;
 import net.abysmal.engine.graphics.Graphics;
@@ -27,8 +29,8 @@ import values.Player;
 public class Update implements Tick {
 
 	Main main;
-	boolean lastInput, reading, clearMobs;
-	int mainMenu = 0;
+	public static boolean lastInput, reading, clearMobs;
+	public static int screen = 0;
 	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	public static Spawner sp;
 	float incomeFactor = 1;
@@ -37,19 +39,24 @@ public class Update implements Tick {
 		this.main = main;
 	}
 
+	public static void switchScreen(int screen){
+		Update.screen = screen;
+		Button.registerButtons(screen, Main.f);
+	}
+	
 	@Override
 	public void update() {
 		if (Main.initialized) {
 
-			if (main.buttons[2].update(main.w.mouseListener)) {
-				mainMenu = 2;
-			}
+//			if (main.buttons[2].update(main.w.mouseListener)) {
+//				screen = 2;
+//			}
+//
+//			if (Research.back.update(main.w.mouseListener)) {
+//				screen = 0;
+//			}
 
-			if (Research.back.update(main.w.mouseListener)) {
-				mainMenu = 0;
-			}
-
-			if (mainMenu == 0) {
+			if (screen == 0) {
 
 				if (!Main.initialized) return;
 
@@ -106,10 +113,10 @@ public class Update implements Tick {
 					incomeFactor = .2f;
 				} else incomeFactor = 1;
 
-				if (main.buttons[0].update(main.w.mouseListener)) {
-					clearMobs = true;
-					Main.currentTrack.lastEscaped = Main.currentTrack.cooldown * 10;
-				}
+//				if (main.buttons[0].update(main.w.mouseListener)) {
+//					clearMobs = true;
+//					Main.currentTrack.lastEscaped = Main.currentTrack.cooldown * 10;
+//				}
 
 				Iterator<Entity> i = Main.currentTrack.entities.iterator();
 				while (i.hasNext()) {
@@ -154,13 +161,17 @@ public class Update implements Tick {
 			g2.clearRect(0, 0, Window.width, Window.height);
 			
 			drawMain(g);
-			if (mainMenu == 0) {
+			if (screen == 0) {
 				g2.drawString("Money: " + Player.money, (int) main.money.a.x, (int) main.money.b.y);
 				g2.drawString("Research: " + Player.research, (int) main.research.a.x, (int) main.research.b.y);
-				g2.drawString("Clear mobs", (int) (main.save.a.x + ((main.save.b.x - main.save.a.x) / 2)) - 40, (int) (main.save.a.y + ((main.save.b.y - main.save.a.y) / 2)) + 5);
+//				g2.drawString("Clear mobs", (int) (main.save.a.x + ((main.save.b.x - main.save.a.x) / 2)) - 40, (int) (main.save.a.y + ((main.save.b.y - main.save.a.y) / 2)) + 5);
 
-				for (Button b:main.buttons) {
-					g.drawRoundRect(b.bounds.a, b.bounds.b, new Vector(10, 10));
+//				for (Button b:main.buttons) {
+//					g.drawRoundRect(b.bounds.a, b.bounds.b, new Vector(10, 10));
+//				}
+				
+				for (Map.Entry<Integer, Button> e : Button.buttons.get(screen).entrySet()) {
+					e.getValue().draw(g);
 				}
 
 				drawDebug(g, g2);
@@ -170,13 +181,13 @@ public class Update implements Tick {
 	}
 
 	private void drawMain(Graphics g) {
-		switch (mainMenu) {
+		switch (screen) {
 			case 0:
 				drawGame(g);
 			break;
 			case 2:
-				Research.draw(g);
-				Research.update(main.w.mouseListener);
+				ResearchMenu.draw(g);
+//				ResearchMenu.update(main.w.mouseListener);
 			break;
 		}
 	}
@@ -221,17 +232,17 @@ public class Update implements Tick {
 						if (Main.currentTrack.world.tiles[1][gridIndex].getTraits() != null && Main.currentTrack.world.tiles[0][gridIndex].getTraits() != null) {
 							if (Main.currentTrack.world.tiles[0][gridIndex].getTraits()[0] != "obstacle") {
 								if (Main.selectedBuildingType == 0 && (Main.currentTrack.buildings[gridIndex] instanceof Block && ((Block) Main.currentTrack.buildings[gridIndex]).viableSupport(Main.selectedBuildingID)) && ((Block) Main.currentTrack.buildings[gridIndex]).tower == null) {
-									g.setColor(new Color(0x50202040, true));
+									g.setColour(new Color(0x50202040, true));
 								} else if ((Main.selectedBuildingType == 1 || (Main.selectedBuildingType == 0 && !Tower.towers.get(Main.selectedBuildingID).requiresBlock)) && Main.currentTrack.buildings[gridIndex] == null) {
-									g.setColor(new Color(0x50202040, true));
-								} else g.setColor(new Color(0x70FF0000, true));
-							} else g.setColor(new Color(0x70FF0000, true));
-						} else g.setColor(new Color(0x70FF0000, true));
-					} else g.setColor(new Color(0x70FF0000, true));
-				} else g.setColor(new Color(0x00FF0000, true));
-			} else g.setColor(new Color(0x70FF0000, true));
+									g.setColour(new Color(0x50202040, true));
+								} else g.setColour(new Color(0x70FF0000, true));
+							} else g.setColour(new Color(0x70FF0000, true));
+						} else g.setColour(new Color(0x70FF0000, true));
+					} else g.setColour(new Color(0x70FF0000, true));
+				} else g.setColour(new Color(0x00FF0000, true));
+			} else g.setColour(new Color(0x70FF0000, true));
 			g.fillRect(tile, Main.currentTrack.tileSize.toVector().add(tile));
-			g.setColor(Color.BLACK);
+			g.setColour(Color.BLACK);
 		}
 	}
 
@@ -241,7 +252,7 @@ public class Update implements Tick {
 			for (Square p:main.partition.partitions) {
 				g.drawRect(p.a, p.b);
 			}
-			g.setColor(new Color(0xAAAAAA));
+			g.setColour(new Color(0xAAAAAA));
 			for (Building b:Main.currentTrack.buildings) {
 				if (b instanceof Block && ((Block) b).tower != null) {
 					Tower t = ((Block) b).tower;
@@ -259,7 +270,7 @@ public class Update implements Tick {
 					if (null != target) g.drawLine(pos, target.pos.add(main.track.a));
 				}
 			}
-			g.setColor(new Color(0));
+			g.setColour(new Color(0));
 			for (int nodeIndex = 0; nodeIndex < Main.currentTrack.path.getLength(); nodeIndex++) {
 				g.fillRect(Main.currentTrack.path.getNodePos(nodeIndex).add(-3f).add(main.track.a), Main.currentTrack.path.getNodePos(nodeIndex).add(3f).add(main.track.a));
 				if (nodeIndex == Main.currentTrack.path.getLength() - 1) continue;
