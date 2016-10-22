@@ -27,6 +27,7 @@ public class Research {
 		prerequisits = new int[] {};
 		this.spritePath = spritePath;
 	}
+
 	
 	
 }
