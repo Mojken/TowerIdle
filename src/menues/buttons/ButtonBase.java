@@ -1,10 +1,8 @@
 package menues.buttons;
 
 import java.awt.Color;
-
 import main.Main;
 import main.Update;
-import menues.ResearchMenu;
 import net.abysmal.engine.graphics.Graphics;
 import net.abysmal.engine.graphics.geometry.Square;
 import net.abysmal.engine.handlers.misc.Button;
@@ -25,7 +23,6 @@ public class ButtonBase extends Button {
 		g.drawRoundRect(bounds.a, bounds.b, new Vector(10, 10));
 
 		g.drawString(label, new Vector((bounds.a.x + ((bounds.b.x - bounds.a.x) / 2)) - label.length()*3.5f, (int) (bounds.a.y + ((bounds.b.y - bounds.a.y) / 2)) + 5));
-		System.out.println((bounds.b.x - bounds.a.x)*.2);
 		Color c = g.getColour();
 		if (within && !pressed) {
 			g.setColour(new Color(0x30000000, true));
@@ -68,11 +65,6 @@ public class ButtonBase extends Button {
 					}
 					break;
 				case 2:
-					if (Player.research.largerThanOrEqualTo(new HugeInteger((short) (200 * Math.pow(ResearchMenu.level, 3)))) && Researches.unlocked(0)) {
-						Update.sp.changeSpawnrate(0, (int) (Update.sp.getSpawnrate(0) * .5));
-						Player.research.add(new HugeInteger((short) -(200 * Math.pow(ResearchMenu.level, 3))));
-						ResearchMenu.level++;
-					}
 					break;
 				}
 			}
