@@ -1,9 +1,12 @@
 package main;
 
+import javax.swing.JFrame;
+
 import enums.Entities;
 import enums.Purchases;
 import enums.Tiles;
-import menues.Research;
+import menues.ResearchMenu;
+import menues.buttons.ButtonBase;
 import net.abysmal.engine.graphics.Partition;
 import net.abysmal.engine.graphics.Window;
 import net.abysmal.engine.graphics.geometry.Square;
@@ -17,6 +20,7 @@ import values.researches.Researches;
 
 public class Main {
 
+	public static JFrame f;
 	Window w;
 	Partition partition, moneyPartition, tabPartition;
 	public Square money, research, tabs, save, towers, track, islandTab, researchTab, upgradeTab;
@@ -33,7 +37,7 @@ public class Main {
 
 	public Main() {
 		w = new Window();
-		w.createWindow("Abysmal Tower", 1000);
+		f = w.createWindow("Abysmal Tower", 1000);
 		w.start(new Update(this));
 		init();
 		Update.sp = new Spawner(Main.currentTrack);
@@ -52,9 +56,16 @@ public class Main {
 //		GlobalVariables.debug = true;
 		currentTrack = new First(new Dimension((int) (Window.width * widthPartition), (int) (Window.height * heightPartition)));
 		setupPartitions();
-		buttons = new Button[] { new Button(save), new Button(islandTab), new Button(researchTab), new Button(upgradeTab) };
+		
+		new ButtonBase(save, "Clear Mobs", 0, 0);
+		new ButtonBase(islandTab, "Islands", 0, 1);
+		new ButtonBase(researchTab, "Research", 0, 2);
+		new ButtonBase(upgradeTab, "Upgrades", 0, 3);
+		
+		Button.registerButtons(Update.screen, f);
+		
 		new Researches();
-		new Research();
+		new ResearchMenu();
 	}
 
 	private void setupPartitions() {
