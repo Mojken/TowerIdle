@@ -1,34 +1,38 @@
 package values.researches;
 
 import java.net.URL;
+import java.util.ArrayList;
+
+import enums.Purchases;
 import net.abysmal.engine.utils.HugeInteger;
 
 public class Research {
-	
-	HugeInteger cost;
+
+	public HugeInteger cost;
 	int[] prerequisits;
 	public int mobID, trackID, ID, level;
 	public URL spritePath;
-	String path = "researchIcon/";
+	public String path = "researchIcon/", name;
 	boolean unlocked = false, maxed = false;
-	
-	public Research(HugeInteger cost, int[] prerequisits, String spritePath) {
+	public static ArrayList<Research> research = new ArrayList<Research>();
+
+	public Research(HugeInteger cost, float cooefficient, int[] prerequisits, String spritePath, String name) {
+		this.name = name;
 		this.cost = cost;
-		this.prerequisits = prerequisits;
+		this.prerequisits = (prerequisits == null) ? new int[] {} : prerequisits;
 		this.spritePath = ClassLoader.getSystemResource(path + spritePath + ".png");
+		research.add(this);
+	}
+
+	public static Research getResearch(int mobId, int id) {
+		// TODO Differentiate between different mobs
+		return research.get(mobId*Purchases.UPGRADES_PER_MOB+id);
 	}
 	
-	public Research(HugeInteger cost, int prerequisite, String spritePath) {
-		this.cost = cost;
-		prerequisits = new int[] {prerequisite};
-		this.spritePath = ClassLoader.getSystemResource(path + spritePath + ".png");
+	//TODO Optimize?
+	public void increaseCost(int level){
+		for(int i = 0; i < level; i++){
+			cost = cost.mult(2.5f);
+		}
 	}
-	
-	public Research(HugeInteger cost, String spritePath) {
-		this.cost = cost;
-		prerequisits = new int[] {};
-		this.spritePath = ClassLoader.getSystemResource(path + spritePath + ".png");
-	}
-	
-	
 }

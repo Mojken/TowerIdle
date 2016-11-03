@@ -69,7 +69,6 @@ public class ButtonBase extends Button {
 				}
 			}
 
-			System.out.println("Pressed button " + id + " on screen " + screen + ". Button pos are: " + bounds.a + " And button size is: " + bounds.b.sub(bounds.a));
 		}
 	}
 	

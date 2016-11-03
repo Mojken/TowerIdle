@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+
 import menues.ResearchMenu;
 import net.abysmal.engine.GlobalVariables;
 import net.abysmal.engine.entities.Entity;
@@ -46,6 +48,10 @@ public class Update implements Tick {
 	
 	@Override
 	public void update() {
+		
+	}
+	
+	public void updater() {
 		if (Main.initialized) {
 
 //			if (main.buttons[2].update(main.w.mouseListener)) {
@@ -157,7 +163,8 @@ public class Update implements Tick {
 	@Override
 	public void render(java.awt.Graphics g2) {
 		if (Main.initialized) {
-			Graphics g = new Graphics(g2);
+			updater();
+			Graphics g = new Graphics((Graphics2D)g2.create());
 			g2.clearRect(0, 0, Window.width, Window.height);
 			
 			drawMain(g);
