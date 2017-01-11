@@ -29,24 +29,27 @@ public class Researches {
 		return false;
 	}
 
-	public static void unlock(int mobId) {
+	public static boolean unlock(int mobId) {
 		if (Player.research.largerThanOrEqualTo(Research.research.get(0).cost) && !Researches.unlocked(0)) {
 			researchLevels[Main.currentTrack.id][mobId][0] = 1;
 			Player.research.sub(Research.research.get(mobId).cost);
+			return true;
 //			Research.getResearch(mobId, 0).increaseCost(10000);
 		}
+		return false;
 	}
 
-	public static void buy(int id) {
+	public static boolean buy(int id) {
 		if (id % Purchases.UPGRADES_PER_MOB == 0) {
-			Researches.unlock(0);
-			return;
+			return Researches.unlock(0);
 		}
 		switch (id) {
 		}
+		return false;
 	}
 
 	public static void sell(int i) {
+		//TODO Printing
 		System.out.println("Sold research with Id " + i);
 	}
 }
