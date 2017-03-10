@@ -15,12 +15,12 @@ public class First extends Track {
 
 	public First(Dimension partitionSize) {
 		super(price, towersAllowed, id);
-		try {
-			map = ImageIO.read(ClassLoader.getSystemResource("tracks/first.png"));
-		} catch (IOException e2) {
-			map = null;
-		}
-		setWorld(new World(map, 16, false), partitionSize);
+//		try {
+//			map = ImageIO.read(ClassLoader.getSystemResource("tracks/first.png"));
+//		} catch (IOException e2) {
+//			map = null;
+//		}
+		setWorld(new World(ClassLoader.getSystemResource("tracks/first.png"), 16, false), partitionSize);
 	}
 
 }

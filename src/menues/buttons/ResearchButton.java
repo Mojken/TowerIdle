@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import enums.Purchases;
+import main.Update;
 import menues.ResearchMenu;
 import net.abysmal.engine.graphics.Graphics;
 import net.abysmal.engine.graphics.Partition;
@@ -37,10 +38,10 @@ public class ResearchButton {
 		p = new Partition(new double[] { 0, .05, 1.2 / 3, 1.8 / 3, .95, 1 }, new double[] { 0, .1, .3, .4, .65, .775, .9, 1 }, bounds.d);
 		if (r.ID % Purchases.UPGRADES_PER_MOB == 0) {
 			sell = null;
-			buy = new RButton(new Square(p.partitions[12].scale(.9f).translate(bounds.a).a, p.partitions[28].scale(.9f).translate(bounds.a).b), "Unlock", 0x888888, 2, research.ID * 2 + 1, true, 0xFFAA0C);
+			buy = new RButton(new Square(p.partitions[12].scale(.9f).translate(bounds.a).a, p.partitions[28].scale(.9f).translate(bounds.a).b), "Unlock", 0x888888, 2, research.ID * 2 + 1, true, 0xFFAA0C, true);
 		} else {
-			buy = new RButton(new Square(p.partitions[23].scale(.9f).translate(bounds.a).a, p.partitions[28].scale(.9f).translate(bounds.a).b), "Buy", 0x888888, 2, research.ID * 2 + 1, true, 0xFFAA0C);
-			sell = new RButton(p.partitions[18].scale(.65f).translate(bounds.a), "Sell", 0x888888, 2, research.ID * 2 + 2, true, 0);
+			buy = new RButton(new Square(p.partitions[23].scale(.9f).translate(bounds.a).a, p.partitions[28].scale(.9f).translate(bounds.a).b), "Buy", 0x888888, 2, research.ID * 2 + 1, true, 0xFFAA0C, false);
+			sell = new RButton(p.partitions[18].scale(.65f).translate(bounds.a), "Sell", 0x888888, 2, research.ID * 2 + 2, true, 0, false);
 		}
 		try {
 			b = ImageIO.read(r.spritePath);
@@ -82,14 +83,16 @@ public class ResearchButton {
 
 	}
 
-	class RButton extends Button {
+	public class RButton extends Button {
 
 		int colour;
+		boolean uButton, unlocked = false;
 		Font f0 = new Font("Monospaced", Font.BOLD, 20);
 		Font f1 = new Font("Monospaced", Font.BOLD, 16);
 
-		public RButton(Square bounds, String label, int pressedColour, int screen, int id, boolean combineMovement, int colour) {
+		public RButton(Square bounds, String label, int pressedColour, int screen, int id, boolean combineMovement, int colour, boolean unlockButton) {
 			super(bounds, label, pressedColour, screen, id, combineMovement);
+			uButton = unlockButton;
 			this.colour = colour;
 		}
 
@@ -115,9 +118,17 @@ public class ResearchButton {
 		@Override
 		public void update(boolean pressed) {
 			if (pressed) {
-				if (id % 2 == 1)
-					Researches.buy((id - 2) / 2);
-				else
+				if (uButton && !unlocked) {
+					if (Researches.buy((id - 2) / 2)) {
+						label = "Enter Shop";
+						unlocked = true;
+					}
+				} else if (uButton && unlocked) {
+					Update.switchScreen((id - 2) / 2 + 10);
+				} else if (id % 2 == 1) {
+					if (Researches.buy((id - 2) / 2) && uButton)
+						System.out.println("WOOT");
+				} else
 					Researches.sell((id - 2) / 2);
 			}
 		}

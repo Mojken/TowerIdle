@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import enums.Entities;
 import enums.Purchases;
 import enums.Tiles;
+import menues.ResearchMenu;
 import menues.buttons.ButtonBase;
 import net.abysmal.engine.GlobalVariables;
 import net.abysmal.engine.graphics.Partition;
@@ -65,6 +66,7 @@ public class Main {
 		Button.registerButtons(Update.screen, f);
 		
 		new Researches();
+		new ResearchMenu();
 	}
 
 	private void setupPartitions() {

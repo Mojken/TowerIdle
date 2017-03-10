@@ -1,7 +1,6 @@
 package main;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -161,16 +160,15 @@ public class Update implements Tick {
 	}
 
 	@Override
-	public void render(java.awt.Graphics g2) {
+	public void render(Graphics g) {
 		if (Main.initialized) {
 			updater();
-			Graphics g = new Graphics((Graphics2D)g2.create());
-			g2.clearRect(0, 0, Window.width, Window.height);
+			g.clearRect(Vector.ZERO(), Window.dimension.toVector());
 			
 			drawMain(g);
 			if (screen == 0) {
-				g2.drawString("Money: " + Player.money, (int) main.money.a.x, (int) main.money.b.y);
-				g2.drawString("Research: " + Player.research, (int) main.research.a.x, (int) main.research.b.y);
+				g.drawString("Money: " + Player.money, new Vector( main.money.a.x, main.money.b.y));
+				g.drawString("Research: " + Player.research, new Vector(main.research.a.x, main.research.b.y));
 //				g2.drawString("Clear mobs", (int) (main.save.a.x + ((main.save.b.x - main.save.a.x) / 2)) - 40, (int) (main.save.a.y + ((main.save.b.y - main.save.a.y) / 2)) + 5);
 
 //				for (Button b:main.buttons) {
@@ -181,7 +179,7 @@ public class Update implements Tick {
 					e.getValue().draw(g);
 				}
 
-				drawDebug(g, g2);
+				drawDebug(g);
 				g.dispose();
 			}
 		}
@@ -253,7 +251,7 @@ public class Update implements Tick {
 		}
 	}
 
-	public void drawDebug(Graphics g, java.awt.Graphics g2) {
+	public void drawDebug(Graphics g) {
 		if (GlobalVariables.debug) {
 
 			for (Square p:main.partition.partitions) {
@@ -264,14 +262,14 @@ public class Update implements Tick {
 				if (b instanceof Block && ((Block) b).tower != null) {
 					Tower t = ((Block) b).tower;
 					Vector pos = Main.currentTrack.grid.getGridCoordinate(t.gridIndex).add(main.track.a).add(Main.currentTrack.grid.tileSize.toVector().multiply(.5f));
-					g2.drawString(t.cooldown + "", (int) (pos.x), (int) (pos.y));
+					g.drawString(t.cooldown + "", pos);
 					g.drawOval(pos.add(-t.radius), new Vector(t.radius * 2, t.radius * 2));
 					Entity target = t.getTarget();
 					if (null != target) g.drawLine(pos, target.pos.add(main.track.a));
 				} else if (b instanceof Tower) {
 					Tower t = (Tower) b;
 					Vector pos = Main.currentTrack.grid.getGridCoordinate(t.gridIndex).add(main.track.a).add(Main.currentTrack.grid.tileSize.toVector().multiply(.5f));
-					g2.drawString(t.cooldown + "", (int) (pos.x), (int) (pos.y));
+					g.drawString(t.cooldown + "", pos);
 					g.drawOval(pos.add(-t.radius), new Vector(t.radius * 2, t.radius * 2));
 					Entity target = t.getTarget();
 					if (null != target) g.drawLine(pos, target.pos.add(main.track.a));

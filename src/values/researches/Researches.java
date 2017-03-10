@@ -2,6 +2,7 @@ package values.researches;
 
 import enums.Purchases;
 import main.Main;
+import menues.buttons.ResearchButton.RButton;
 import objects.entities.Mob;
 import objects.tracks.Track;
 import values.Player;
@@ -29,20 +30,23 @@ public class Researches {
 		return false;
 	}
 
-	public static void unlock(int mobId) {
+	public static boolean unlock(int mobId) {
 		if (Player.research.largerThanOrEqualTo(Research.research.get(0).cost) && !Researches.unlocked(0)) {
 			researchLevels[Main.currentTrack.id][mobId][0] = 1;
 			Player.research.sub(Research.research.get(mobId).cost);
 //			Research.getResearch(mobId, 0).increaseCost(10000);
+			return true;
 		}
+		return false;
 	}
 
-	public static void buy(int id) {
+	public static boolean buy(int id) {
 		if (id % Purchases.UPGRADES_PER_MOB == 0) {
-			Researches.unlock(0);
-			return;
+			return Researches.unlock(0);
 		}
 		switch (id) {
+		default:
+			return false;
 		}
 	}
 
