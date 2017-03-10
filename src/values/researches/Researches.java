@@ -2,7 +2,6 @@ package values.researches;
 
 import enums.Purchases;
 import main.Main;
-import menues.buttons.ResearchButton.RButton;
 import objects.entities.Mob;
 import objects.tracks.Track;
 import values.Player;
@@ -34,8 +33,8 @@ public class Researches {
 		if (Player.research.largerThanOrEqualTo(Research.research.get(0).cost) && !Researches.unlocked(0)) {
 			researchLevels[Main.currentTrack.id][mobId][0] = 1;
 			Player.research.sub(Research.research.get(mobId).cost);
-//			Research.getResearch(mobId, 0).increaseCost(10000);
 			return true;
+//			Research.getResearch(mobId, 0).increaseCost(10000);
 		}
 		return false;
 	}
@@ -51,6 +50,7 @@ public class Researches {
 	}
 
 	public static void sell(int i) {
+		//TODO Printing
 		System.out.println("Sold research with Id " + i);
 	}
 }

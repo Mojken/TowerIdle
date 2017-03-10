@@ -37,11 +37,17 @@ public class Main {
 	}
 
 	public Main() {
+		System.out.print("Initiating");
 		w = new Window();
 		f = w.createWindow("Abysmal Tower", 1000);
+		System.out.print(".");
 		w.start(new Update(this));
+		System.out.print(".");
 		init();
+		System.out.println(".");
 		Update.sp = new Spawner(Main.currentTrack);
+		System.out.println("Done!");
+		Window.frame.setVisible(true);
 		initialized = true;
 	}
 
@@ -64,7 +70,7 @@ public class Main {
 		new ButtonBase(upgradeTab, "Upgrades", 0, 3);
 		
 		Button.registerButtons(Update.screen, f);
-		
+		new ResearchMenu();
 		new Researches();
 		new ResearchMenu();
 	}
