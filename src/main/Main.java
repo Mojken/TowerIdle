@@ -72,7 +72,6 @@ public class Main {
 		Button.registerButtons(Update.screen, f);
 		new ResearchMenu();
 		new Researches();
-		new ResearchMenu();
 	}
 
 	private void setupPartitions() {

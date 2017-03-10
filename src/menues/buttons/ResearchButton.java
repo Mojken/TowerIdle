@@ -37,6 +37,7 @@ public class ResearchButton {
 		f1 = new Font("Monospaced", Font.BOLD, (int) (bBounds.b.clone().sub(bBounds.a).y / 7.4));
 		p = new Partition(new double[] { 0, .05, 1.2 / 3, 1.8 / 3, .95, 1 }, new double[] { 0, .1, .3, .4, .65, .775, .9, 1 }, bBounds.d);
 		if (r.ID % Purchases.UPGRADES_PER_MOB == 0) {
+			buy = new RButton(new Square(p.partitions[12].scale(.9f).translate(bBounds.a).a, p.partitions[28].scale(.9f).translate(bBounds.a).b), "Unlock", 0x888888, 2, research.ID * 2 + 1, true, 0xFFAA0C);
 			sell = null;
 		} else {
 			buy = new RButton(new Square(p.partitions[23].scale(.9f).translate(bBounds.a).a, p.partitions[28].scale(.9f).translate(bBounds.a).b), "Buy", 0x888888, 2, research.ID * 2 + 1, true, 0xFFAA0C);
