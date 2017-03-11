@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import menues.ResearchMenu;
 import net.abysmal.engine.GlobalVariables;
 import net.abysmal.engine.entities.Entity;
+import net.abysmal.engine.entities.AI.Pathfinding;
 import net.abysmal.engine.graphics.Graphics;
 import net.abysmal.engine.graphics.Window;
 import net.abysmal.engine.graphics.geometry.Square;
@@ -278,6 +279,7 @@ public class Update implements Tick {
 			g.setColour(new Color(0));
 			for (int nodeIndex = 0; nodeIndex < Main.currentTrack.path.getLength(); nodeIndex++) {
 				g.fillRect(Main.currentTrack.path.getNodePos(nodeIndex).add(-3f).add(main.track.a), Main.currentTrack.path.getNodePos(nodeIndex).add(3f).add(main.track.a));
+				if(Pathfinding.costs != null)g.drawString(""+Pathfinding.costs[nodeIndex][2], Main.currentTrack.path.getNodePos(nodeIndex));
 				if (nodeIndex == Main.currentTrack.path.getLength() - 1) continue;
 				g.drawLine(Main.currentTrack.path.getNodePos(nodeIndex).add(main.track.a), Main.currentTrack.path.getNodePos(nodeIndex + 1).add(main.track.a));
 			}

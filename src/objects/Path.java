@@ -22,13 +22,13 @@ public class Path {
 
 	public void calculatePath(Track track) {
 		for (int w = 0; w < weights.length; w++) {
-			if (track.buildings[w] == null) weights[w] = -1;
+			if (track.buildings[w] == null) weights[w] = 1;
 			else{
 				weights[w] = track.buildings[w].weight;
 			}
 		}
 		for (int w = 0; w < weights.length; w++) {
-			if (weights[w] == -1) {
+			if (weights[w] == 1) {
 				if (track.world.tiles[1][w].getID() != Tile.tilesReal.get(0).getID()) {
 					weights[w] = 1;
 				}

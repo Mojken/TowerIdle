@@ -6,9 +6,7 @@ import java.awt.Font;
 import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
 import enums.Purchases;
 import menues.ResearchMenu;
 import net.abysmal.engine.graphics.Graphics;
@@ -26,7 +24,8 @@ public class ResearchButton {
 	Research r;
 	Font f0, f1;
 	RButton buy, sell;
-	Button toggle, open;
+	ToggleButton toggle;
+	Button open;
 	Partition p;
 	BufferedImage b;
 
@@ -125,7 +124,7 @@ public class ResearchButton {
 					float lenght = p.partitions[8].b.sub(p.partitions[8].a).y;
 					Vector dimensions = new Vector(lenght, lenght);
 					Square sb = new Square(p.partitions[8].b.sub(dimensions), p.partitions[8].b);
-					toggle = new Button(sb.translate(bBounds.a), "", 0, 2, 10, false);
+					toggle = new ToggleButton(sb.translate(bBounds.a), "", 0xff, 2, 10, false);
 				}
 			}
 		}
