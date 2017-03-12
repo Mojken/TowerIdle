@@ -7,6 +7,8 @@ import net.abysmal.engine.handlers.misc.Movement;
 import net.abysmal.engine.maths.Hitbox;
 import net.abysmal.engine.maths.Vector;
 import net.abysmal.engine.utils.HugeInteger;
+import values.researches.Research;
+import values.researches.Researches;
 
 public class Mob extends Entity {
 
@@ -53,5 +55,17 @@ public class Mob extends Entity {
 			}
 		}
 		return super.move();
+	}
+
+	public double getResearchMultiplier(int id) {
+		return 1 + (Research.research.get(id).increase * Researches.getResearchLevels()[Main.currentTrack.id][this.id][id][0]);
+	}
+
+	public double getIncomeMultiplier() {
+		double multi = 1;
+		for (int i = 0; i < Researches.getResearchLevels()[Main.currentTrack.id][id][i].length; i++)
+			multi += (Research.research.get(i).multiplier * Researches.getResearchLevels()[Main.currentTrack.id][id][i][0]);
+
+		return multi;
 	}
 }

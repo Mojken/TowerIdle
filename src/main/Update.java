@@ -6,9 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-
 import javax.imageio.ImageIO;
-
+import menues.BuildingShop;
 import menues.ResearchMenu;
 import net.abysmal.engine.GlobalVariables;
 import net.abysmal.engine.entities.Entity;
@@ -41,49 +40,41 @@ public class Update implements Tick {
 		this.main = main;
 	}
 
-	public static void switchScreen(int screen){
+	public static void switchScreen(int screen) {
 		Update.screen = screen;
 		Button.registerButtons(screen, Main.f);
 	}
-	
+
+	public static void updateScreen() {
+		Button.registerButtons(screen, Main.f);
+	}
+
 	@Override
 	public void update() {
-		
+
 	}
-	
+
 	public void updater() {
 		if (Main.initialized) {
-
-//			if (main.buttons[2].update(main.w.mouseListener)) {
-//				screen = 2;
-//			}
-//
-//			if (Research.back.update(main.w.mouseListener)) {
-//				screen = 0;
-//			}
-
 			if (screen == 0) {
 
 				if (!Main.initialized) return;
 
-				if (main.w.keyboardListener.getCurrentlyPressedKeys()[KeyEvent.VK_1][0] == 1) Main.selectedBuildingID = 0;
-				if (main.w.keyboardListener.getCurrentlyPressedKeys()[KeyEvent.VK_2][0] == 1) Main.selectedBuildingID = 1;
-
-				if (main.w.keyboardListener.getCurrentlyPressedKeys()[KeyEvent.VK_CONTROL][0] == 1) Main.selectedBuildingType = 0;
-				else Main.selectedBuildingType = 1;
+// if (main.w.keyboardListener.getCurrentlyPressedKeys()[KeyEvent.VK_1][0] == 1) Main.selectedBuildingID = 0;
+// if (main.w.keyboardListener.getCurrentlyPressedKeys()[KeyEvent.VK_2][0] == 1) Main.selectedBuildingID = 1;
+//
+// if (main.w.keyboardListener.getCurrentlyPressedKeys()[KeyEvent.VK_CONTROL][0] == 1) Main.selectedBuildingType = 0;
+// else Main.selectedBuildingType = 1;
 
 				if (main.w.mouseListener.getClickInfo()[1][4] == 1 && (!lastInput || main.w.keyboardListener.getCurrentlyPressedKeys()[KeyEvent.VK_SHIFT][0] == 1)) {
 					if (main.track.isWithin(main.w.mouseListener.getMousePosition())) {
-						// if(buildingSelected){
 						Building.placeBuilding(main.w.mouseListener.getMousePosition().sub(main.track.a));
 						Main.currentTrack.path.calculatePath(Main.currentTrack);
-						// }
 					}
 				}
 
 				if (main.w.mouseListener.getClickInfo()[3][4] == 1) {
 					if (main.track.isWithin(main.w.mouseListener.getMousePosition())) {
-						// if(buildingSelected){
 						if (main.w.keyboardListener.getCurrentlyPressedKeys()[KeyEvent.VK_CONTROL][0] == 1) {
 							Building b0 = Main.currentTrack.buildings[Main.currentTrack.grid.getGridIndex(main.w.mouseListener.getMousePosition().sub(main.track.a))];
 							if (b0 != null) {
@@ -99,7 +90,6 @@ public class Update implements Tick {
 							Building.sellBuilding(main.w.mouseListener.getMousePosition().sub(main.track.a));
 							Main.currentTrack.path.calculatePath(Main.currentTrack);
 						}
-						// }
 					}
 				}
 
@@ -119,10 +109,10 @@ public class Update implements Tick {
 					incomeFactor = .2f;
 				} else incomeFactor = 1;
 
-//				if (main.buttons[0].update(main.w.mouseListener)) {
-//					clearMobs = true;
-//					Main.currentTrack.lastEscaped = Main.currentTrack.cooldown * 10;
-//				}
+// if (main.buttons[0].update(main.w.mouseListener)) {
+// clearMobs = true;
+// Main.currentTrack.lastEscaped = Main.currentTrack.cooldown * 10;
+// }
 
 				Iterator<Entity> i = Main.currentTrack.entities.iterator();
 				while (i.hasNext()) {
@@ -134,20 +124,20 @@ public class Update implements Tick {
 							if (mob instanceof Mob) {
 								if (new Square(e.hitbox.getHitboxPoints()[0].add(e.pos), e.hitbox.getHitboxPoints()[1].add(e.pos)).isWithin(mob)) {
 									e.kill = true;
-									((Mob) mob).currentHealth = ((Mob) mob).currentHealth.sub(((Projectile) e).hugeDamage);
+									((Mob) mob).currentHealth = ((Mob) mob).currentHealth.mult((float) (((Mob) mob).getResearchMultiplier(1))).sub(((Projectile) e).hugeDamage);
 									break;
 								}
 							}
 						}
 					}
 
-					if (e instanceof Mob && !((Mob) e).currentHealth.largerThanOrEqualTo(new HugeInteger((short) 1))) {
+					if (e instanceof Mob && !((Mob) e).currentHealth.mult((float) (((Mob) e).getResearchMultiplier(1))).largerThanOrEqualTo(new HugeInteger((short) 1))) {
 						e.kill = true;
 					}
 					// TODO implement visual feedback (?)
 					if (e.kill) {
 						if (e instanceof Mob) {
-							Player.money.add(((Mob) e).income.mult(incomeFactor));
+							Player.money.add(((Mob) e).income.mult((float) (((Mob) e).getIncomeMultiplier())).mult(incomeFactor));
 						}
 						i.remove();
 					}
@@ -165,18 +155,18 @@ public class Update implements Tick {
 		if (Main.initialized) {
 			updater();
 			g.clearRect(Vector.ZERO(), Window.dimension.toVector());
-			
+
 			drawMain(g);
 			if (screen == 0) {
-				g.drawString("Money: " + Player.money, new Vector( main.money.a.x, main.money.b.y));
-				g.drawString("Research: " + Player.research, new Vector(main.research.a.x, main.research.b.y));
-//				g2.drawString("Clear mobs", (int) (main.save.a.x + ((main.save.b.x - main.save.a.x) / 2)) - 40, (int) (main.save.a.y + ((main.save.b.y - main.save.a.y) / 2)) + 5);
+				g.drawString("Money: " + Player.money, new Vector(main.money.a.x, main.money.d.y));
+				g.drawString("Research: " + Player.research, new Vector(main.research.a.x, main.research.d.y));
+// g2.drawString("Clear mobs", (int) (main.save.a.x + ((main.save.b.x - main.save.a.x) / 2)) - 40, (int) (main.save.a.y + ((main.save.b.y - main.save.a.y) / 2)) + 5);
 
-//				for (Button b:main.buttons) {
-//					g.drawRoundRect(b.bounds.a, b.bounds.b, new Vector(10, 10));
-//				}
-				
-				for (Map.Entry<Integer, Button> e : Button.buttons.get(screen).entrySet()) {
+// for (Button b:main.buttons) {
+// g.drawRoundRect(b.bounds.a, b.bounds.b, new Vector(10, 10));
+// }
+
+				for (Map.Entry<Integer, Button> e:Button.buttons.get(screen).entrySet()) {
 					e.getValue().draw(g);
 				}
 
@@ -190,16 +180,20 @@ public class Update implements Tick {
 		switch (screen) {
 			case 0:
 				drawGame(g);
+				BuildingShop.draw(g);
 			break;
 			case 2:
 				ResearchMenu.draw(g);
-//				ResearchMenu.update(main.w.mouseListener);
+// ResearchMenu.update(main.w.mouseListener);
+			break;
+			case 20:
+				ResearchMenu.draw(g);
 			break;
 		}
 	}
 
 	private void drawGame(Graphics g) {
-		g.drawImage(Main.currentTrack.world.world, main.track.a, main.track.b.sub(main.track.a));
+		g.drawImage(Main.currentTrack.world.world, main.track.a, main.track.d.sub(main.track.a));
 		for (Building b:Main.currentTrack.buildings) {
 			if (b == null) continue;
 			try {
@@ -255,8 +249,11 @@ public class Update implements Tick {
 	public void drawDebug(Graphics g) {
 		if (GlobalVariables.debug) {
 
-			for (Square p:main.partition.partitions) {
-				g.drawRect(p.a, p.b);
+			for (Square p:Main.partition.partitions) {
+				g.drawRect(p.a, p.d);
+			}
+			for (Square p:Main.towerPartition.partitions) {
+				g.drawRect(p.a.add(Main.towerOffset), p.d.add(Main.towerOffset));
 			}
 			g.setColour(new Color(0xAAAAAA));
 			for (Building b:Main.currentTrack.buildings) {
@@ -279,7 +276,7 @@ public class Update implements Tick {
 			g.setColour(new Color(0));
 			for (int nodeIndex = 0; nodeIndex < Main.currentTrack.path.getLength(); nodeIndex++) {
 				g.fillRect(Main.currentTrack.path.getNodePos(nodeIndex).add(-3f).add(main.track.a), Main.currentTrack.path.getNodePos(nodeIndex).add(3f).add(main.track.a));
-				if(Pathfinding.costs != null)g.drawString(""+Pathfinding.costs[nodeIndex][2], Main.currentTrack.path.getNodePos(nodeIndex));
+				if (Pathfinding.costs != null) g.drawString("" + Pathfinding.costs[nodeIndex][2], Main.currentTrack.path.getNodePos(nodeIndex));
 				if (nodeIndex == Main.currentTrack.path.getLength() - 1) continue;
 				g.drawLine(Main.currentTrack.path.getNodePos(nodeIndex).add(main.track.a), Main.currentTrack.path.getNodePos(nodeIndex + 1).add(main.track.a));
 			}

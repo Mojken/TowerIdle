@@ -8,6 +8,7 @@ import net.abysmal.engine.maths.Dimension;
 import net.abysmal.engine.utils.HugeInteger;
 import objects.Path;
 import objects.buildings.Building;
+import objects.entities.Mob;
 
 public class Track {
 	
@@ -21,13 +22,14 @@ public class Track {
 	public ArrayList<Entity> entities = new ArrayList<Entity>();
 	public Building[] buildings;
 	public Dimension tileSize, mapSize;
-	public boolean[] researches;
+	public boolean[] enabledMobs = new boolean[Mob.mobTypes.size()];
 	public int id;
 
 	public Track(HugeInteger price, int towersAllowed, int id) {
 		this.price = price;
 		this.towersAllowed = towersAllowed;
 		this.id = id;
+		for(int i = 0; i < enabledMobs.length; i++) enabledMobs[i] = false;
 	}
 
 	protected void setWorld(World world, Dimension partitionSize) {
