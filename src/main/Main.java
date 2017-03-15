@@ -4,9 +4,10 @@ import javax.swing.JFrame;
 import enums.Entities;
 import enums.Purchases;
 import enums.Tiles;
-import menues.BuildingShop;
-import menues.ResearchMenu;
-import menues.buttons.ButtonBase;
+import menus.BuildingShop;
+import menus.ResearchMenu;
+import menus.UpgradeMenu;
+import menus.buttons.ButtonBase;
 import net.abysmal.engine.GlobalVariables;
 import net.abysmal.engine.graphics.Partition;
 import net.abysmal.engine.graphics.Window;
@@ -35,6 +36,10 @@ public class Main {
 	public Button[] buttons;
 
 	public static void main(String[] args) {
+		if (args.length > 0 && args[0].equals("debug")) {
+			System.out.println("Starting game with parameter " + args[0]);
+			GlobalVariables.debug = true;
+		}
 		new Main();
 	}
 
@@ -45,6 +50,7 @@ public class Main {
 		System.out.print(".");
 		w.start(new Update(this));
 		System.out.print(".");
+		//TODO loading screen here
 		init();
 		System.out.println(".");
 		Update.sp = new Spawner(Main.currentTrack);
@@ -61,8 +67,7 @@ public class Main {
 		for (Purchases s:Purchases.values())
 			s.name();
 
-		Settings.setDvorak();
-		GlobalVariables.debug = true;
+		Settings.setDvorak(); //TODO debug
 		currentTrack = new First(new Dimension((int) (Window.width * widthPartition), (int) (Window.height * heightPartition)));
 		setupPartitions();
 
@@ -75,6 +80,7 @@ public class Main {
 		new ResearchMenu();
 		new Researches();
 		new BuildingShop();
+		new UpgradeMenu();
 	}
 
 	private void setupPartitions() {

@@ -1,4 +1,4 @@
-package menues;
+package menus;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -19,8 +19,9 @@ public class BuildingShop {
 	public static ArrayList<ShopButton> buttons = new ArrayList<ShopButton>();
 
 	public BuildingShop() {
-		int tower = 0;
-		int block = 20;
+		int tower = 20;
+		int block = 0;
+		int misc = 40;
 		for (Building b:Building.buildings) {
 			switch (b.category) {
 				case 0:
@@ -30,6 +31,12 @@ public class BuildingShop {
 				case 1:
 					buttons.add(new ShopButton(Main.towerPartition.partitions[block].translate(Main.towerOffset), b, 100 + block));
 					block++;
+				break;
+				case 2:
+					buttons.add(new ShopButton(Main.towerPartition.partitions[misc].translate(Main.towerOffset), b, 100 + misc));
+					misc++;
+				break;
+				case 3:
 				break;
 			}
 		}
@@ -68,7 +75,7 @@ public class BuildingShop {
 			if (Main.selectedBuildingID == b.ID && Main.selectedBuildingType == b.type) g.setColour(new Color(0xff101010));
 
 			try {
-				g.drawImage(ImageIO.read(imagePath), sb.a.add(1), sb.dimension.toVector().sub(2));
+				g.drawImage(ImageIO.read(b.getFile()), sb.a.add(1), sb.dimension.toVector().sub(2));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

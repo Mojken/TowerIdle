@@ -12,7 +12,7 @@ public class Block extends Building {
 	public Tower tower;
 	
 	public Block(int strength, int weight, HugeInteger cost, HugeInteger health, int researchID, int ID, String spritePath) {
-		super(cost, weight, health, researchID, ID, spritePath, 1);
+		super(cost, weight, health, researchID, ID, spritePath, 1, 1);
 		this.strength = strength;
 	}
 

@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import javax.imageio.ImageIO;
-import menues.BuildingShop;
-import menues.ResearchMenu;
+import menus.BuildingShop;
+import menus.ResearchMenu;
+import menus.UpgradeMenu;
 import net.abysmal.engine.GlobalVariables;
 import net.abysmal.engine.entities.Entity;
 import net.abysmal.engine.entities.AI.Pathfinding;
@@ -69,7 +70,7 @@ public class Update implements Tick {
 				if (main.w.mouseListener.getClickInfo()[1][4] == 1 && (!lastInput || main.w.keyboardListener.getCurrentlyPressedKeys()[KeyEvent.VK_SHIFT][0] == 1)) {
 					if (main.track.isWithin(main.w.mouseListener.getMousePosition())) {
 						Building.placeBuilding(main.w.mouseListener.getMousePosition().sub(main.track.a));
-						Main.currentTrack.path.calculatePath(Main.currentTrack);
+						Main.currentTrack.path.calculatePath(Main.currentTrack, Main.currentTrack.entities);
 					}
 				}
 
@@ -82,13 +83,13 @@ public class Update implements Tick {
 									if (b1 == null) continue;
 									if (b0.ID == b1.ID && b0.type == b1.type) {
 										Building.sellBuilding(Main.currentTrack.grid.getGridCoordinate(b1.gridIndex));
-										Main.currentTrack.path.calculatePath(Main.currentTrack);
+										Main.currentTrack.path.calculatePath(Main.currentTrack, Main.currentTrack.entities);
 									}
 								}
 							}
 						} else {
 							Building.sellBuilding(main.w.mouseListener.getMousePosition().sub(main.track.a));
-							Main.currentTrack.path.calculatePath(Main.currentTrack);
+							Main.currentTrack.path.calculatePath(Main.currentTrack, Main.currentTrack.entities);
 						}
 					}
 				}
@@ -109,11 +110,6 @@ public class Update implements Tick {
 					incomeFactor = .2f;
 				} else incomeFactor = 1;
 
-// if (main.buttons[0].update(main.w.mouseListener)) {
-// clearMobs = true;
-// Main.currentTrack.lastEscaped = Main.currentTrack.cooldown * 10;
-// }
-
 				Iterator<Entity> i = Main.currentTrack.entities.iterator();
 				while (i.hasNext()) {
 					Entity e = i.next();
@@ -124,7 +120,7 @@ public class Update implements Tick {
 							if (mob instanceof Mob) {
 								if (new Square(e.hitbox.getHitboxPoints()[0].add(e.pos), e.hitbox.getHitboxPoints()[1].add(e.pos)).isWithin(mob)) {
 									e.kill = true;
-									((Mob) mob).currentHealth = ((Mob) mob).currentHealth.mult((float) (((Mob) mob).getResearchMultiplier(1))).sub(((Projectile) e).hugeDamage);
+									((Mob) mob).currentHealth = ((Mob) mob).currentHealth.sub(((Projectile) e).hugeDamage);
 									break;
 								}
 							}
@@ -160,11 +156,6 @@ public class Update implements Tick {
 			if (screen == 0) {
 				g.drawString("Money: " + Player.money, new Vector(main.money.a.x, main.money.d.y));
 				g.drawString("Research: " + Player.research, new Vector(main.research.a.x, main.research.d.y));
-// g2.drawString("Clear mobs", (int) (main.save.a.x + ((main.save.b.x - main.save.a.x) / 2)) - 40, (int) (main.save.a.y + ((main.save.b.y - main.save.a.y) / 2)) + 5);
-
-// for (Button b:main.buttons) {
-// g.drawRoundRect(b.bounds.a, b.bounds.b, new Vector(10, 10));
-// }
 
 				for (Map.Entry<Integer, Button> e:Button.buttons.get(screen).entrySet()) {
 					e.getValue().draw(g);
@@ -184,7 +175,9 @@ public class Update implements Tick {
 			break;
 			case 2:
 				ResearchMenu.draw(g);
-// ResearchMenu.update(main.w.mouseListener);
+			break;
+			case 3:
+				UpgradeMenu.draw(g);
 			break;
 			case 20:
 				ResearchMenu.draw(g);
@@ -211,6 +204,7 @@ public class Update implements Tick {
 		for (Entity e:Main.currentTrack.entities) {
 			if (e == null) continue;
 			try {
+// System.out.println(e.textureStr);
 				if (null == e.textureURL || e.pos == null) continue;
 				g.drawImage(ImageIO.read(e.textureURL), e.pos.add(e.hitbox.getHitboxPoints()[0]).add(main.track.a), e.hitbox.getHitboxPoints()[1].multiply(2.5f));
 			} catch (IOException ex) {
@@ -276,7 +270,7 @@ public class Update implements Tick {
 			g.setColour(new Color(0));
 			for (int nodeIndex = 0; nodeIndex < Main.currentTrack.path.getLength(); nodeIndex++) {
 				g.fillRect(Main.currentTrack.path.getNodePos(nodeIndex).add(-3f).add(main.track.a), Main.currentTrack.path.getNodePos(nodeIndex).add(3f).add(main.track.a));
-				if (Pathfinding.costs != null) g.drawString("" + Pathfinding.costs[nodeIndex][2], Main.currentTrack.path.getNodePos(nodeIndex));
+				if (Pathfinding.costs != null) g.drawString("" + Pathfinding.costs[nodeIndex][2], Main.currentTrack.path.getNodePos(nodeIndex).add(main.track.a).add(-5.1f));
 				if (nodeIndex == Main.currentTrack.path.getLength() - 1) continue;
 				g.drawLine(Main.currentTrack.path.getNodePos(nodeIndex).add(main.track.a), Main.currentTrack.path.getNodePos(nodeIndex + 1).add(main.track.a));
 			}

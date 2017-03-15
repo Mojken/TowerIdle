@@ -13,22 +13,11 @@ import values.Player;
 public class Building {
 
 	public HugeInteger cost, health;
-	public int researchID, ID, weight, category;
+	public int researchID, ID, weight = 1, category;
 	public static ArrayList<Building> buildings = new ArrayList<Building>();
 	public String spritePath;
 	public int type;
 	public int gridIndex;
-
-	public Building(HugeInteger cost, int weight, HugeInteger health, int researchID, int ID, String spritePath, int category) {
-		this.weight = weight;
-		this.cost = cost;
-		this.researchID = researchID;
-		this.ID = ID;
-		this.health = health;
-		this.spritePath = spritePath;
-		this.type = 2;
-		this.category = category;
-	}
 
 	public Building(HugeInteger cost, int weight, HugeInteger health, int researchID, int ID, String spritePath, int type, int category) {
 		this.weight = weight;

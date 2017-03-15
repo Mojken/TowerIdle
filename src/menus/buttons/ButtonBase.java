@@ -1,4 +1,4 @@
-package menues.buttons;
+package menus.buttons;
 
 import java.awt.Color;
 import main.Main;
@@ -50,6 +50,9 @@ public class ButtonBase extends Button {
 						case 2:
 							Update.switchScreen(2);
 						break;
+						case 3:
+							Update.switchScreen(3);
+						break;
 					}
 				case 1:
 				break;
@@ -67,11 +70,18 @@ public class ButtonBase extends Button {
 						case 2:
 						break;
 					}
-				break;
-				default:
+				case 3:
 					switch (id) {
 						case 0:
-							Update.switchScreen(2);
+							Update.switchScreen(0);
+						break;
+					}
+				break;
+				default:
+					if (screen >= 20) Update.switchScreen(2);
+					else switch (id) {
+						case 0:
+							Update.switchScreen(0);
 						break;
 					}
 			}

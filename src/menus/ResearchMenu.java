@@ -1,4 +1,4 @@
-package menues;
+package menus;
 
 import java.awt.Font;
 import java.util.ArrayList;
@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import enums.Purchases;
 import main.Update;
-import menues.buttons.ButtonBase;
-import menues.buttons.ResearchButton;
+import menus.buttons.ButtonBase;
+import menus.buttons.ResearchButton;
 import net.abysmal.engine.graphics.Graphics;
 import net.abysmal.engine.graphics.Partition;
 import net.abysmal.engine.graphics.Window;
@@ -19,7 +19,7 @@ import values.researches.Research;
 
 public class ResearchMenu {
 
-	public static ButtonBase back1, back2, spawnrate;
+	public static ButtonBase back1, back2;
 	public static Square[] buttons = new Square[18];
 	public static Map<Integer, ArrayList<ResearchButton>> researchButton = new HashMap<Integer, ArrayList<ResearchButton>>();
 	public int screen;
@@ -49,7 +49,6 @@ public class ResearchMenu {
 		}
 		back2 = new ButtonBase(new Square(new Vector(10, 10), new Vector(80, 40)), "Back", screen, 0);
 		for (int i = id + 1; i < id + Purchases.UPGRADES_PER_MOB; i++) {
-			System.out.println(i);
 			researchButton.get(screen).add(new ResearchButton(Research.research.get(i), screen));
 		}
 	}
@@ -65,7 +64,7 @@ public class ResearchMenu {
 		g.setFont(f);
 		String label = "Research";
 		if (Update.screen != 2) label = Research.research.get(Update.screen - 20).name + " " + label;
-		g.drawString(label, new Vector(Window.width / 2 - label.length() * f.getSize() / 3.5f, f.getSize()*.8f));
+		g.drawString(label, new Vector(Window.width / 2 - label.length() * f.getSize() / 3.5f, f.getSize() * .8f));
 
 		g.setFont(f0);
 
@@ -75,6 +74,5 @@ public class ResearchMenu {
 		for (Map.Entry<Integer, ArrayList<ResearchButton>> b:researchButton.entrySet())
 			if (b.getKey() == Update.screen) for (ResearchButton rb:b.getValue())
 				rb.draw(g);
-
 	}
 }

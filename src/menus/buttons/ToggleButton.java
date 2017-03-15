@@ -1,4 +1,4 @@
-package menues.buttons;
+package menus.buttons;
 
 import java.awt.BasicStroke;
 import java.awt.Stroke;

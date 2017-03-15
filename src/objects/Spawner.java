@@ -29,12 +29,15 @@ public class Spawner {
 			if (Researches.unlocked(i) && Main.currentTrack.enabledMobs[i]) types[i] = Mob.mobTypes.get(i);
 			else if (!Main.currentTrack.enabledMobs[i]) types[i] = null;
 		}
+		
 		for (int i = 0; i < relativeSpawnrate.length; i++) {
 			if (types[i] != null) {
 				relativeSpawnrate[i]--;
 				if (relativeSpawnrate[i] <= 0) {
 					relativeSpawnrate[i] = getSpawnrate(i);
-					Main.currentTrack.entities.add(new Mob(sp.add(Main.currentTrack.tileSize.toVector().multiply(.5f)), types[i]));
+					Mob m = new Mob(sp.add(Main.currentTrack.tileSize.toVector().multiply(.5f)), types[i], Main.currentTrack.path);
+					m.updateStats();
+					Main.currentTrack.entities.add(m);
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-package menues.buttons;
+package menus.buttons;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -9,7 +9,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import enums.Purchases;
 import main.Update;
-import menues.ResearchMenu;
+import menus.ResearchMenu;
 import net.abysmal.engine.GlobalVariables;
 import net.abysmal.engine.graphics.Graphics;
 import net.abysmal.engine.graphics.Partition;
@@ -134,6 +134,7 @@ public class ResearchButton {
 					toggle = new ToggleButton(sb.translate(bBounds.a), "", screen, r.ID/Purchases.UPGRADES_PER_MOB+50, false);
 					open = new OButton(bounds, "Open", screen, 11, false);
 					new ResearchMenu(r.ID);
+					toggle.update(true);
 					Update.updateScreen();
 				}
 			}

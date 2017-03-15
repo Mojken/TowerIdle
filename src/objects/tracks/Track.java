@@ -16,7 +16,7 @@ public class Track {
 	public static final int TRACK_AMOUNT = 1;
 	public Path path;
 	HugeInteger price;
-	public int towersAllowed, lastEscaped = 0, cooldown = 1000; // Zero for no limit, cooldown - time since last mob escaped
+	public int towersAllowed, lastEscaped = 0, cooldown = 1000; // Zero for no limit / cooldown - time since last mob escaped
 	public World world;
 	public Grid grid;
 	public ArrayList<Entity> entities = new ArrayList<Entity>();
@@ -35,8 +35,6 @@ public class Track {
 	protected void setWorld(World world, Dimension partitionSize) {
 		this.world = world;
 		mapSize = world.mapSize;
-//		for (int i = 0; i < mapSize.getArea(); i++)
-//			buildings.add(i, new Empty());
 		tileSize = new Dimension(partitionSize.getWidth() / mapSize.getWidth(), partitionSize.getHeight() / mapSize.getHeight());
 		grid = new Grid(tileSize, mapSize);
 		buildings = new Building[mapSize.getArea()];
