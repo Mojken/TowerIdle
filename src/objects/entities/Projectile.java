@@ -10,12 +10,13 @@ import objects.towers.Tower;
 
 public class Projectile extends net.abysmal.engine.entities.Projectile<Tower> {
 
-	public static ArrayList<Projectile> projectileTypes = new ArrayList<Projectile>();
+	public static ArrayList<Projectile> projectileTypes = new ArrayList<>();
 	public Vector target;
 	public int id = -1;
 
 	public Projectile(int id, int speed, HugeInteger damage, String texture, Hitbox hitbox) {
 		super(id, speed, 0, damage, texture, hitbox);
+		projectileTypes.add(id, this);
 	}
 
 	public Projectile(Vector pos, Projectile type, Tower source, Vector targetPos, int id) {
